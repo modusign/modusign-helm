@@ -1,0 +1,19 @@
+{{- if .Values.server.enabled }}
+{{- if .Values.server.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "application.server.name" . }}
+  labels:
+    {{- include "application.labels" . | nindent 4 }}
+spec:
+  {{- with .Values.server.pdb.maxUnavailable }}
+  maxUnavailable: {{ . }}
+  {{- else }}
+  minAvailable: {{ .Values.server.pdb.minAvailable | default 0 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "application.server.matchLabels" . | nindent 6 }}
+{{- end }}
+{{- end }}

@@ -3,9 +3,9 @@ entries:
   application-template:
   - apiVersion: v2
     appVersion: v1.0.0
-    created: "2024-01-07T16:03:08.931082+09:00"
+    created: "2024-01-09T17:49:44.410142+09:00"
     description: A Helm chart for Modusign Applications
-    digest: ea72590e796cdaaf7bd989d9a0d3925ff9db2114ffa41939ce0badfe1b6184ed
+    digest: b76c50dc871fa6f1e288c4b1df83fab15c39154142a85f7a3e570b0db140ae1e
     home: https://app.modusign.co.kr
     keywords:
     - modusign
@@ -15,6 +15,6 @@ entries:
       url: https://github.com/modusign
     name: application-template
     urls:
-    - application-template-1.2.0.tgz
-    version: 1.2.0
-generated: "2024-01-07T16:03:08.929134+09:00"
+    - application-template-1.1.0.tgz
+    version: 1.1.0
+generated: "2024-01-09T17:49:44.407667+09:00"

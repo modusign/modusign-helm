@@ -1,0 +1,19 @@
+{{- if .Values.worker.enabled }}
+{{- if .Values.worker.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "application.worker.name" . }}
+  labels:
+    {{- include "application.labels" . | nindent 4 }}
+spec:
+  {{- with .Values.worker.pdb.maxUnavailable }}
+  maxUnavailable: {{ . }}
+  {{- else }}
+  minAvailable: {{ .Values.worker.pdb.minAvailable | default 0 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "application.worker.matchLabels" . | nindent 6 }}
+{{- end }}
+{{- end }}

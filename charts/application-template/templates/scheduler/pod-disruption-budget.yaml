@@ -1,0 +1,19 @@
+{{- if .Values.scheduler.enabled }}
+{{- if .Values.scheduler.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "application.scheduler.name" . }}
+  labels:
+    {{- include "application.labels" . | nindent 4 }}
+spec:
+  {{- with .Values.scheduler.pdb.maxUnavailable }}
+  maxUnavailable: {{ . }}
+  {{- else }}
+  minAvailable: {{ .Values.scheduler.pdb.minAvailable | default 0 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "application.scheduler.matchLabels" . | nindent 6 }}
+{{- end }}
+{{- end }}

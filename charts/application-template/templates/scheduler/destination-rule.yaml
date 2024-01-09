@@ -1,0 +1,21 @@
+{{- if .Values.scheduler.enabled }}
+{{- if .Values.scheduler.istio.enabled }}
+{{- range $index, $destinationRule := .Values.scheduler.istio.destinationRules }}
+{{- with $destinationRule }}
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "application.labels" $ | nindent 4 }}
+spec:
+  host: {{ .host }}
+  trafficPolicy:
+    {{- toYaml .trafficPolicy | nindent 4 }}
+  subsets:
+    {{- toYaml .subsets | nindent 4 }}
+{{- end }}
+---
+{{- end }}
+{{- end }}
+{{- end }}

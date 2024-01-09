@@ -1,0 +1,181 @@
+{{- if .Values.server.enabled }}
+{{- if eq (.Values.server.workload | lower) "rollout" }}
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  {{- with (mergeOverwrite (deepCopy .Values.global.deploymentAnnotations) .Values.server.deploymentAnnotations) }}
+  annotations:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+  name: {{ template "application.server.name" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "application.labels" . | nindent 4 }}
+spec:
+  {{- with (mergeOverwrite (deepCopy .Values.global.deploymentStrategy) .Values.server.deploymentStrategy) }}
+  strategy:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with (mergeOverwrite (deepCopy .Values.global.rolloutAnalysis) .Values.server.rolloutAnalysis) }}
+  analysis:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- if not .Values.server.autoscaling.enabled }}
+  replicas: {{ .Values.server.replicas }}
+  {{- end }}
+  minReadySeconds: {{ .Values.global.minReadySeconds }}
+  revisionHistoryLimit: {{ .Values.global.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "application.server.matchLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- if .Values.global.env }}
+        checksum/configmap: {{ include (print $.Template.BasePath "/server/config-map.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.global.vault.enabled }}
+        checksum/secret: {{ include (print $.Template.BasePath "/server/secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- with (mergeOverwrite (deepCopy .Values.global.podAnnotations) .Values.server.podAnnotations) }}
+        {{- range $key, $value := . }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
+      labels:
+        {{- include "application.server.selectorLabels" . | nindent 8 }}
+        {{- include "application.labels" . | nindent 8 }}
+        {{- with (mergeOverwrite (deepCopy .Values.global.podLabels) .Values.server.podLabels) }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.server.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.server.terminationGracePeriodSeconds }}
+      {{- end }}
+      serviceAccountName: {{ include "server.serviceAccountName" . }}
+      containers:
+      - name: {{ .Values.server.name }}
+        {{- with (.Values.server.image.repository | default .Values.global.image.repository) }}
+        {{- if contains "/" ($.Values.server.image.repository | default $.Values.global.image.repository) }}
+        image: "{{ . }}:{{ $.Values.server.image.tag | default $.Values.global.image.tag }}"
+        {{- else }}
+        image: "{{ $.Values.server.image.hub | default $.Values.global.image.hub }}/{{ $.Values.server.image.repository | default $.Values.global.image.repository }}:{{ $.Values.server.image.tag | default $.Values.global.image.tag }}"
+        {{- end }}
+        {{- end }}
+        imagePullPolicy: {{ .Values.server.image.imagePullPolicy | default .Values.global.image.imagePullPolicy }}
+        {{- if .Values.server.extraCommands }}
+        command:
+        {{- with .Values.server.extraCommands }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.server.extraArgs }}
+        args:
+        {{- with .Values.server.extraArgs }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+        {{- with .Values.server.extraEnvs }}
+        env:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        envFrom:
+        {{- if .Values.global.env  }}
+          - configMapRef:
+              name: {{ include "application.name" . }}-env
+        {{- end }}
+        {{- if .Values.global.vault.enabled  }}
+          - secretRef:
+              name: {{ include "application.name" . }}
+        {{- end }}
+        {{- with .Values.server.envFrom }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.server.volumeMounts }}
+        volumeMounts:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        ports:
+        {{- range .Values.server.ports }}
+          - name: {{ .name }}
+            containerPort: {{ .targetPort }}
+            protocol: TCP
+        {{- end }}
+        {{- with .Values.server.livenessProbe }}
+        livenessProbe:
+          httpGet:
+            path: {{ .httpGet.path }}
+            port: {{ .httpGet.port }}
+          initialDelaySeconds: {{ .initialDelaySeconds }}
+          periodSeconds: {{ .periodSeconds }}
+          timeoutSeconds: {{ .timeoutSeconds }}
+          successThreshold: {{ .successThreshold }}
+          failureThreshold: {{ .failureThreshold }}
+        {{- end }}
+        {{- with .Values.server.readinessProbe }}
+        readinessProbe:
+          httpGet:
+            path: {{ .httpGet.path }}
+            port: {{ .httpGet.port }}
+          initialDelaySeconds: {{ .initialDelaySeconds }}
+          periodSeconds: {{ .periodSeconds }}
+          timeoutSeconds: {{ .timeoutSeconds }}
+          successThreshold: {{ .successThreshold }}
+          failureThreshold: {{ .failureThreshold }}
+        {{- end }}
+        resources:
+          {{- toYaml .Values.server.resources | nindent 10 }}
+        {{- with .Values.server.lifecycle }}
+        lifecycle:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+      {{- with .Values.server.initContainers }}
+      initContainers:
+      {{- range $index, $container := . }}
+      {{- with $container }}
+        - name: {{ .name }}
+          {{- if contains "/" .image.repository }}
+          image: "{{ .image.repository }}:{{ .image.tag }}"
+          {{- else }}
+          image: "{{ .image.hub }}/{{ .image.repository }}:{{ .image.tag }}"
+          {{- end }}
+          imagePullPolicy: {{ .image.imagePullPolicy }}
+          {{- toYaml .container | nindent 10 }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.server.affinity | default .Values.global.affinity  }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.server.nodeSelector | default .Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.server.tolerations | default .Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.server.topologySpreadConstraints | default .Values.global.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- range $constraint := . }}
+      - {{ toYaml $constraint | nindent 8 | trim }}
+        {{- if not $constraint.labelSelector }}
+        labelSelector:
+          matchLabels:
+            {{- include "application.server.matchLabels" $ | nindent 12 }}
+        {{- end }}
+        {{- end }}
+      {{- end }}
+      {{- with .Values.server.volumes }}
+      volumes:
+        {{- toYaml . | nindent 6 }}
+      {{- end }}
+{{- end }}
+{{- end }}

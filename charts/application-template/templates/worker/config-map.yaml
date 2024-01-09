@@ -1,0 +1,26 @@
+{{- if .Values.worker.enabled }}
+{{- if .Values.global.env }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "application.worker.name" . }}-env
+  labels:
+    {{- include "application.labels" . | nindent 4 }}
+data:
+  {{- toYaml .Values.global.env | nindent 2 }}
+{{- end }}
+{{- end }}
+---
+{{- range $index, $configMap := .Values.worker.extraConfigMaps }}
+{{- with $configMap }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "application.labels" $ | nindent 4 }}
+data:
+  {{- toYaml .data | nindent 2 }}
+{{- end }}
+---
+{{- end }}

@@ -1,0 +1,38 @@
+{{- if .Values.worker.enabled }}
+{{- if .Values.worker.autoscaling.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+    name: {{ include "application.worker.name" . }}
+    labels:
+    {{- include "application.labels" . | nindent 8 }}
+spec:
+    {{- with .Values.worker.autoscaling.scaleTargetRef }}
+    scaleTargetRef:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    minReplicas: {{ .Values.worker.autoscaling.minReplicas }}
+    maxReplicas: {{ .Values.worker.autoscaling.maxReplicas }}
+    metrics:
+      {{- with .Values.worker.autoscaling.targetMemoryUtilizationPercentage }}
+      - type: Resource
+        resource:
+          name: memory
+          target:
+            type: Utilization
+            averageUtilization: {{ . }}
+      {{- end }}
+      {{- with .Values.worker.autoscaling.targetCPUUtilizationPercentage }}
+      - type: Resource
+        resource:
+          name: cpu
+          target:
+            type: Utilization
+            averageUtilization: {{ . }}
+      {{- end }}
+    {{- with .Values.worker.autoscaling.behavior }}
+    behavior:
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+{{- end }}
+{{- end }}

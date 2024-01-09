@@ -1,0 +1,20 @@
+{{- if .Values.server.istio.enabled }}
+{{- if .Values.server.istio.ingressGateways }}
+{{- range $index, $gateway := .Values.server.istio.ingressGateways }}
+{{- with $gateway }}
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "application.labels" $ | nindent 4 }}
+spec:
+  selector:
+    {{- toYaml .selector | nindent 4}}
+  servers:
+    {{- toYaml .servers | nindent 4 }}
+{{- end }}
+---
+{{- end }}
+{{- end }}
+{{- end }}

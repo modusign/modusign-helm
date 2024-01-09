@@ -1,0 +1,829 @@
+## global
+global:
+  # -- Common labels for the all resources
+  additionalLabels: {}
+
+  # -- optional field that specifies the minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing
+  minReadySeconds : 60
+
+  # -- Number of old deployment ReplicaSets to retain. The rest will be garbage collected.
+  revisionHistoryLimit: 3
+
+  # Default image used by all components
+  image:
+    # -- hub applied to all deployments
+    hub: harbor.modusign.co.kr/modusign
+    # -- repository applied to all deployments
+    repository: application-template
+    # -- global image tag
+    tag: "1.0.0"
+    # -- imagePullPolicy applied to all deployments
+    imagePullPolicy: IfNotPresent
+
+  # -- Secrets with credentials to pull images from a private registry
+  imagePullSecrets: []
+
+  # -- Annotations for the all deployed Deployments
+  deploymentAnnotations: {}
+
+  # -- Annotations for the all deployed pods
+  podAnnotations: {}
+
+  # -- Labels for the all deployed pods
+  podLabels: {}
+
+  # -- Default node selector for all components
+  nodeSelector: {}
+
+  # -- Default tolerations for all components
+  tolerations: []
+
+  # Default affinity preset for all components
+  affinity: {}
+  # # -- Default pod anti-affinity rules. Either: `none`, `soft` or `hard`
+  # podAntiAffinity: soft
+  # # Node affinity rules
+  # nodeAffinity:
+  #   # -- Default node affinity rules. Either: `none`, `soft` or `hard`
+  #   type: hard
+  #   # -- Default match expressions for node affinity
+  #   matchExpressions: []
+  #     # - key: topology.kubernetes.io/zone
+  #     #   operator: In
+  #     #   values:
+  #     #    - antarctica-east1
+  #     #    - antarctica-west1
+
+  # -- Default [TopologySpreadConstraints] rules for all components
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## If labelSelector is left out, it will default to the labelSelector of the component
+  topologySpreadConstraints: []
+    # - maxSkew: 1
+    #   topologyKey: topology.kubernetes.io/zone
+    #   whenUnsatisfiable: DoNotSchedule
+
+  # -- Deployment strategy to be added to the all Deployment
+  deploymentStrategy: {}
+    # type: RollingUpdate
+    # rollingUpdate:
+    #   maxSurge: 25%
+    #   maxUnavailable: 25%
+
+  # -- Rollout analysis to be added to the all Rollout
+  rolloutAnalysis: {}
+    # successfulRunHistoryLimit: 1
+    # unsuccessfulRunHistoryLimit: 3
+
+  serviceAccount:
+    # -- Create global service account
+    # create: true
+    # -- Server service account name
+    # name: application-template
+    # -- Annotations applied to created service account
+    annotations: {}
+    # -- Labels applied to created service account
+    labels: {}
+    # -- Automount API credentials for the Service Account
+    automountServiceAccountToken: false
+    # -- Image pull Secrets for the Service Account
+    imagePullSecrets: []
+
+  # -- Environment variables to pass to all deployed Deployments
+  env: {}
+
+  # -- Secrets variables to pass to all deployed Deployments by argocd vault plugin
+  vault:
+    enabled: false
+    path: stage-default/application/${service}
+    secrets: {}
+
+  observability:
+    # -- inject datadog admission controller env label
+    datadog:
+      admissionController:
+        enabled: false
+    # -- inject grafana
+    # grafana:
+    #   enabled: false
+
+## Server
+server:
+  enabled: true
+  # -- server name
+  name: application-template
+
+  # -- set deployment kind to Rollouts
+  # rollout:
+  #   enabled : false
+  workload: rollout
+
+  # Default image used by server components
+  image:
+    # -- hub applied to server deployments
+    hub: ""
+    # -- repository applied to server deployments
+    repository: ""
+    # -- global image tag
+    tag: ""
+    # -- imagePullPolicy applied to server deployments
+    imagePullPolicy: ""
+
+  # -- The number of server pods to run
+  replicas: 1
+
+  ## server Horizontal Pod Autoscaler
+  autoscaling:
+    # -- Enable Horizontal Pod Autoscaler ([HPA]) for the server
+    enabled: true
+    # -- Minimum number of replicas for the server [HPA]
+    minReplicas: 1
+    # -- Maximum number of replicas for the server [HPA]
+    maxReplicas: 5
+    # -- Average CPU utilization percentage for the server [HPA]
+    # -- If targetCPUUtilizationPercentage is set to 0, the autoscaler will not take CPU metrics into consideration while calculating the number of replicas.
+    targetCPUUtilizationPercentage: 80
+    # -- Average memory utilization percentage for the server [HPA]
+    # -- If targetMemoryUtilizationPercentage is set to 0, the autoscaler will not take memory metrics into consideration while calculating the number of replicas.
+    targetMemoryUtilizationPercentage: 0
+    # -- Configures the scaling behavior of the target in both Up and Down directions.
+    behavior: {}
+      # scaleDown:
+      #  stabilizationWindowSeconds: 300
+      #  policies:
+      #   - type: Pods
+      #     value: 1
+      #     periodSeconds: 180
+      # scaleUp:
+      #   stabilizationWindowSeconds: 300
+      #   policies:
+      #   - type: Pods
+      #     value: 2
+      #     periodSeconds: 60
+    scaleTargetRef:
+      apiVersion: argoproj.io/v1alpha1
+      kind: Rollout
+      name: application-template-server
+  ## server Pod Disruption Budget
+  pdb:
+    # -- Deploy a [PodDisruptionBudget] for the server
+    enabled: true
+    # -- Labels to be added to server pdb
+    labels: {}
+    # -- Annotations to be added to server pdb
+    annotations: {}
+    # -- Number of pods that are available after eviction as number or percentage (eg.: 50%)
+    # @default -- `""` (defaults to 0 if not specified)
+    minAvailable: 1
+    # -- Number of pods that are unavailable after eviction as number or percentage (eg.: 50%).
+    ## Has higher precedence over `server.pdb.minAvailable`
+    maxUnavailable: ""
+
+  # -- Additional command line arguments to pass to server
+  extraArgs: []
+
+  # -- Additional command line arguments to pass to server
+  extraCommands: []
+
+  # -- Additional configMaps to pass to server
+  extraConfigMaps: []
+    # - name: application-template-server
+    #   data:
+    #     test: values
+
+  # -- extra envs to pass to server
+  extraEnvs: []
+    # - name: VAULT_ADDR
+    #   value: http://vault:8200
+
+  # -- extra secrets to pass to server
+  extraSecrets: []
+
+  # -- envfrom in server deployment
+  envFrom: []
+
+  # -- Specify postStart and preStop lifecycle hooks for your container
+  lifecycle: {}
+
+  # -- Annotations to be added to server Deployment
+  deploymentAnnotations: {}
+
+  # -- Annotations to be added to server pods
+  podAnnotations: {}
+
+  # -- Labels to be added to server pods
+  podLabels: {}
+
+  # -- Resource limits and requests for the server
+  resources:
+    requests:
+      memory: "800Mi"
+      cpu: "400m"
+    limits:
+      memory: "1600Mi"
+      cpu: "800m"
+
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+
+  ## Readiness and liveness probes for default backend
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+  # readinessProbe:
+  #   httpGet:
+  #     path: /health
+  #     port: 3000
+  #   # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
+  #   failureThreshold: 3
+  #   # -- Number of seconds after the container has started before [probe] is initiated
+  #   initialDelaySeconds: 10
+  #   # -- How often (in seconds) to perform the [probe]
+  #   periodSeconds: 10
+  #   # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
+  #   successThreshold: 1
+  #   # -- Number of seconds after which the [probe] times out
+  #   timeoutSeconds: 1
+
+  # livenessProbe:
+  #   httpGet:
+  #     path: /health
+  #     port: 3000
+  #   # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
+  #   failureThreshold: 3
+  #   # -- Number of seconds after the container has started before [probe] is initiated
+  #   initialDelaySeconds: 10
+  #   # -- How often (in seconds) to perform the [probe]
+  #   periodSeconds: 10
+  #   # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
+  #   successThreshold: 1
+  #   # -- Number of seconds after which the [probe] times out
+  #   timeoutSeconds: 1
+
+  # -- terminationGracePeriodSeconds for container lifecycle hook
+  terminationGracePeriodSeconds: 30
+
+  # -- [Node selector]
+  # @default -- `{}` (defaults to global.nodeSelector)
+  nodeSelector: {}
+
+  # -- [Tolerations] for use with node taints
+  # @default -- `[]` (defaults to global.tolerations)
+  tolerations: []
+
+  # -- Init containers to add to the application server pod
+  initContainers: []
+  #  - name: download-tools
+  #    image: alpine:3
+  #    command: [sh, -c]
+  #    args:
+  #      - wget -qO kubelogin.zip https://github.com/Azure/kubelogin/releases/download/v0.0.25/kubelogin-linux-amd64.zip &&
+  #        unzip kubelogin.zip && mv bin/linux_amd64/kubelogin /custom-tools/
+  #    volumeMounts:
+  #      - mountPath: /custom-tools
+  #        name: custom-tools
+
+  # -- Additional volumeMounts to the application server main container
+  volumeMounts: []
+  #  - mountPath: /usr/local/bin/kubelogin
+  #    name: custom-tools
+  #    subPath: kubelogin
+
+  # -- Additional volumes to the application server pod
+  volumes: []
+  #  - name: custom-tools
+  #    emptyDir: {}
+
+  # -- Assign custom [affinity] rules to the deployment
+  # @default -- `{}` (defaults to global.affinity preset)
+  affinity: {}
+
+  # -- Assign custom [TopologySpreadConstraints] rules to the server
+  # @default -- `[]` (defaults to global.topologySpreadConstraints)
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## If labelSelector is left out, it will default to the labelSelector configuration of the deployment
+  topologySpreadConstraints: []
+    # - maxSkew: 1
+    #   topologyKey: topology.kubernetes.io/zone
+    #   whenUnsatisfiable: DoNotSchedule
+
+  # -- Deployment strategy to be added to the server Deployment
+  deploymentStrategy: {}
+    # type: RollingUpdate
+    # rollingUpdate:
+    #   maxSurge: 25%
+    #   maxUnavailable: 25%
+
+  # -- Rollout analysis to be added to the server Rollout
+  rolloutAnalysis:
+    successfulRunHistoryLimit: 1
+    unsuccessfulRunHistoryLimit: 3
+
+  serviceAccount:
+    # -- Create server service account
+    create: true
+    # -- Server service account name
+    name: application-template-server
+    # -- Annotations applied to created service account
+    annotations: {}
+    # -- Labels applied to created service account
+    labels: {}
+    # -- Automount API credentials for the Service Account
+    automountServiceAccountToken: false
+    # -- Image pull Secrets for the Service Account
+    imagePullSecrets: []
+
+  istio:
+    # -- Create istio resources
+    enabled: true
+
+    # -- ingress gateway configuration
+    ingressGateways: []
+    # -- virtualService configuration
+    virtualServices: []
+    # -- destinationRule configuration
+    destinationRules: []
+
+## Worker
+worker:
+  enabled: false
+
+  # -- worker name
+  name: application-template-worker
+
+  # -- set deployment kind to Rollouts
+  # rollout:
+  #   enabled : false
+
+  workload: deployment
+
+  # Default image used by worker components
+  image:
+    # -- hub applied to worker deployments
+    hub: ""
+    # -- repository applied to worker deployments
+    repository: ""
+    # -- global image tag
+    tag: ""
+    # -- imagePullPolicy applied to worker deployments
+    imagePullPolicy: ""
+
+  # -- The number of worker pods to run
+  replicas: 1
+
+  ## worker Horizontal Pod Autoscaler
+  autoscaling:
+    # -- Enable Horizontal Pod Autoscaler ([HPA]) for the worker
+    enabled: true
+    # -- Minimum number of replicas for the worker [HPA]
+    minReplicas: 1
+    # -- Maximum number of replicas for the worker [HPA]
+    maxReplicas: 5
+    # -- Average CPU utilization percentage for the worker [HPA]
+    # -- If targetCPUUtilizationPercentage is set to 0, the autoscaler will not take CPU metrics into consideration while calculating the number of replicas.
+    targetCPUUtilizationPercentage: 80
+    # -- Average memory utilization percentage for the worker [HPA]
+    # -- If targetMemoryUtilizationPercentage is set to 0, the autoscaler will not take memory metrics into consideration while calculating the number of replicas.
+    targetMemoryUtilizationPercentage: 0
+    # -- Configures the scaling behavior of the target in both Up and Down directions.
+    behavior: {}
+      # scaleDown:
+      #  stabilizationWindowSeconds: 300
+      #  policies:
+      #   - type: Pods
+      #     value: 1
+      #     periodSeconds: 180
+      # scaleUp:
+      #   stabilizationWindowSeconds: 300
+      #   policies:
+      #   - type: Pods
+      #     value: 2
+      #     periodSeconds: 60
+
+    # -- scaleTargetRef for the worker [HPA]
+    # -- scaleTargetRef.name is same value with worker.name
+    scaleTargetRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: application-template-worker
+
+  ## worker Pod Disruption Budget
+  pdb:
+    # -- Deploy a [PodDisruptionBudget] for the worker
+    enabled: false
+    # -- Labels to be added to worker pdb
+    labels: {}
+    # -- Annotations to be added to worker pdb
+    annotations: {}
+    # -- Number of pods that are available after eviction as number or percentage (eg.: 50%)
+    # @default -- `""` (defaults to 0 if not specified)
+    minAvailable: ""
+    # -- Number of pods that are unavailable after eviction as number or percentage (eg.: 50%).
+    ## Has higher precedence over `worker.pdb.minAvailable`
+    maxUnavailable: ""
+
+  # -- Additional command line arguments to pass to worker
+  extraArgs: []
+
+  # -- Additional command line arguments to pass to worker
+  extraCommands: []
+
+  # -- Additional configMaps to pass to worker
+  extraConfigMaps: []
+    # - name: application-template-server
+    #   data:
+    #     test: values
+
+  # -- extra envs to pass to worker
+  extraEnvs: []
+
+  # -- extra secrets to pass to worker
+  extraSecrets: []
+
+  # -- envfrom in worker deployment
+  envFrom: []
+
+  # -- Specify postStart and preStop lifecycle hooks for your container
+  lifecycle: {}
+
+  # -- Annotations to be added to worker Deployment
+  deploymentAnnotations: {}
+
+  # -- Annotations to be added to worker pods
+  podAnnotations: {}
+
+  # -- Labels to be added to worker pods
+  podLabels: {}
+
+  # -- Resource limits and requests for the worker
+  resources: {}
+  #  limits:
+  #    cpu: 100m
+  #    memory: 128Mi
+  #  requests:
+  #    cpu: 50m
+  #    memory: 64Mi
+
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+
+  ## Readiness and liveness probes for default backend
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+  # readinessProbe:
+  #   httpGet:
+  #     path: /health
+  #     port: 3000
+  #   # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
+  #   failureThreshold: 3
+  #   # -- Number of seconds after the container has started before [probe] is initiated
+  #   initialDelaySeconds: 10
+  #   # -- How often (in seconds) to perform the [probe]
+  #   periodSeconds: 10
+  #   # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
+  #   successThreshold: 1
+  #   # -- Number of seconds after which the [probe] times out
+  #   timeoutSeconds: 1
+
+  # livenessProbe:
+  #   httpGet:
+  #     path: /health
+  #     port: 3000
+  #   # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
+  #   failureThreshold: 3
+  #   # -- Number of seconds after the container has started before [probe] is initiated
+  #   initialDelaySeconds: 10
+  #   # -- How often (in seconds) to perform the [probe]
+  #   periodSeconds: 10
+  #   # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
+  #   successThreshold: 1
+  #   # -- Number of seconds after which the [probe] times out
+  #   timeoutSeconds: 1
+
+  # -- terminationGracePeriodSeconds for container lifecycle hook
+  terminationGracePeriodSeconds: 30
+
+  # -- [Node selector]
+  # @default -- `{}` (defaults to global.nodeSelector)
+  nodeSelector: {}
+
+  # -- [Tolerations] for use with node taints
+  # @default -- `[]` (defaults to global.tolerations)
+  tolerations: []
+
+   # -- Init containers to add to the application worker pod
+  initContainers: []
+  #  - name: download-tools
+  #    image: alpine:3
+  #    command: [sh, -c]
+  #    args:
+  #      - wget -qO kubelogin.zip https://github.com/Azure/kubelogin/releases/download/v0.0.25/kubelogin-linux-amd64.zip &&
+  #        unzip kubelogin.zip && mv bin/linux_amd64/kubelogin /custom-tools/
+  #    volumeMounts:
+  #      - mountPath: /custom-tools
+  #        name: custom-tools
+
+  # -- Additional volumeMounts to the application worker main container
+  volumeMounts: []
+  #  - mountPath: /usr/local/bin/kubelogin
+  #    name: custom-tools
+  #    subPath: kubelogin
+
+  # -- Additional volumes to the application worker pod
+  volumes: []
+  #  - name: custom-tools
+  #    emptyDir: {}
+
+  # -- Assign custom [affinity] rules to the deployment
+  # @default -- `{}` (defaults to global.affinity preset)
+  affinity: {}
+
+  # -- Assign custom [TopologySpreadConstraints] rules to the worker
+  # @default -- `[]` (defaults to global.topologySpreadConstraints)
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## If labelSelector is left out, it will default to the labelSelector configuration of the deployment
+  topologySpreadConstraints: []
+    # - maxSkew: 1
+    #   topologyKey: topology.kubernetes.io/zone
+    #   whenUnsatisfiable: DoNotSchedule
+
+  # -- Deployment strategy to be added to the worker Deployment
+  deploymentStrategy: {}
+    # type: RollingUpdate
+    # rollingUpdate:
+    #   maxSurge: 25%
+    #   maxUnavailable: 25%
+
+  # -- Rollout analysis to be added to the worker Rollout
+  rolloutAnalysis: {}
+    # successfulRunHistoryLimit: 1
+    # unsuccessfulRunHistoryLimit: 3
+
+  serviceAccount:
+    # -- Create global service account
+    create: true
+    # -- Server service account name
+    name: application-template-worker
+    # -- Annotations applied to created service account
+    annotations: {}
+    # -- Labels applied to created service account
+    labels: {}
+    # -- Automount API credentials for the Service Account
+    automountServiceAccountToken: false
+    # -- Image pull Secrets for the Service Account
+    imagePullSecrets: []
+
+  istio:
+    # -- Create istio resources
+    enabled: false
+
+    # -- ingress gateway configuration
+    ingressGateways: []
+    # -- virtualService configuration
+    virtualServices: []
+    # -- destinationRule configuration
+    destinationRules: []
+
+## Scheduler
+scheduler:
+  enabled: false
+
+  # -- scheduler name
+  name: application-template-scheduler
+
+  # -- set deployment kind to Rollouts
+  # rollout:
+  #   enabled : false
+
+  workload: deployment
+
+  # Default image used by scheduler components
+  image:
+    # -- hub applied to scheduler deployments
+    hub: ""
+    # -- repository applied to scheduler deployments
+    repository: ""
+    # -- global image tag
+    tag: ""
+    # -- imagePullPolicy applied to scheduler deployments
+    imagePullPolicy: ""
+
+  # -- The number of scheduler pods to run
+  replicas: 1
+
+  ## scheduler Horizontal Pod Autoscaler
+  autoscaling:
+    # -- Enable Horizontal Pod Autoscaler ([HPA]) for the scheduler
+    enabled: false
+    # -- Minimum number of replicas for the scheduler [HPA]
+    minReplicas: 1
+    # -- Maximum number of replicas for the scheduler [HPA]
+    maxReplicas: 5
+    # -- Average CPU utilization percentage for the scheduler [HPA]
+    # -- If targetCPUUtilizationPercentage is set to 0, the autoscaler will not take CPU metrics into consideration while calculating the number of replicas.
+    targetCPUUtilizationPercentage: 80
+    # -- Average memory utilization percentage for the scheduler [HPA]
+    # -- If targetMemoryUtilizationPercentage is set to 0, the autoscaler will not take memory metrics into consideration while calculating the number of replicas.
+    targetMemoryUtilizationPercentage: 0
+    # -- Configures the scaling behavior of the target in both Up and Down directions.
+    behavior: {}
+      # scaleDown:
+      #  stabilizationWindowSeconds: 300
+      #  policies:
+      #   - type: Pods
+      #     value: 1
+      #     periodSeconds: 180
+      # scaleUp:
+      #   stabilizationWindowSeconds: 300
+      #   policies:
+      #   - type: Pods
+      #     value: 2
+      #     periodSeconds: 60
+    scaleTargetRef: {}
+      # apiVersion: apps/v1
+      # kind: Deployment
+      # name: application-template-scheduler
+
+  ## scheduler Pod Disruption Budget
+  pdb:
+    # -- Deploy a [PodDisruptionBudget] for the scheduler
+    enabled: false
+    # -- Labels to be added to scheduler pdb
+    labels: {}
+    # -- Annotations to be added to scheduler pdb
+    annotations: {}
+    # -- Number of pods that are available after eviction as number or percentage (eg.: 50%)
+    # @default -- `""` (defaults to 0 if not specified)
+    minAvailable: ""
+    # -- Number of pods that are unavailable after eviction as number or percentage (eg.: 50%).
+    ## Has higher precedence over `scheduler.pdb.minAvailable`
+    maxUnavailable: ""
+
+  # -- Additional command line arguments to pass to scheduler
+  extraArgs: []
+
+  # -- Additional command line arguments to pass to scheduler
+  extraCommands: []
+
+  # -- Additional configMaps to pass to scheduler
+  extraConfigMaps: []
+    # - name: application-template-server
+    #   data:
+    #     test: values
+
+  # -- extra envs to pass to shceduler
+  extraEnvs: []
+
+  # -- extra secrets to pass to scheduler
+  extraSecrets: []
+  # - name: application-template-server
+    #   annotations: {}
+    #   labels: {}
+    #   type: Opaque
+    #   secrets :
+    #     test: values
+
+  # -- envfrom in scheduler deployment
+  envFrom: []
+
+  # -- Specify postStart and preStop lifecycle hooks for your container
+  lifecycle: {}
+
+  # -- Annotations to be added to scheduler Deployment
+  deploymentAnnotations: {}
+
+  # -- Annotations to be added to scheduler pods
+  podAnnotations: {}
+
+  # -- Labels to be added to scheduler pods
+  podLabels: {}
+
+  # -- Resource limits and requests for the scheduler
+  resources: {}
+  #  limits:
+  #    cpu: 100m
+  #    memory: 128Mi
+  #  requests:
+  #    cpu: 50m
+  #    memory: 64Mi
+
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+
+  ## Readiness and liveness probes for default backend
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+  # readinessProbe:
+  #   httpGet:
+  #     path: /health
+  #     port: 3000
+  #   # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
+  #   failureThreshold: 3
+  #   # -- Number of seconds after the container has started before [probe] is initiated
+  #   initialDelaySeconds: 10
+  #   # -- How often (in seconds) to perform the [probe]
+  #   periodSeconds: 10
+  #   # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
+  #   successThreshold: 1
+  #   # -- Number of seconds after which the [probe] times out
+  #   timeoutSeconds: 1
+
+  # livenessProbe:
+  #   httpGet:
+  #     path: /health
+  #     port: 3000
+  #   # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
+  #   failureThreshold: 3
+  #   # -- Number of seconds after the container has started before [probe] is initiated
+  #   initialDelaySeconds: 10
+  #   # -- How often (in seconds) to perform the [probe]
+  #   periodSeconds: 10
+  #   # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
+  #   successThreshold: 1
+  #   # -- Number of seconds after which the [probe] times out
+  #   timeoutSeconds: 1
+
+  # -- terminationGracePeriodSeconds for container lifecycle hook
+  terminationGracePeriodSeconds: 30
+
+  # -- [Node selector]
+  # @default -- `{}` (defaults to global.nodeSelector)
+  nodeSelector: {}
+
+  # -- [Tolerations] for use with node taints
+  # @default -- `[]` (defaults to global.tolerations)
+  tolerations: []
+
+  # -- Init containers to add to the application scheduler pod
+  initContainers: []
+  #  - name: download-tools
+  #    image: alpine:3
+  #    command: [sh, -c]
+  #    args:
+  #      - wget -qO kubelogin.zip https://github.com/Azure/kubelogin/releases/download/v0.0.25/kubelogin-linux-amd64.zip &&
+  #        unzip kubelogin.zip && mv bin/linux_amd64/kubelogin /custom-tools/
+  #    volumeMounts:
+  #      - mountPath: /custom-tools
+  #        name: custom-tools
+
+  # -- Additional volumeMounts to the application scheduler main container
+  volumeMounts: []
+  #  - mountPath: /usr/local/bin/kubelogin
+  #    name: custom-tools
+  #    subPath: kubelogin
+
+  # -- Additional volumes to the application scheduler pod
+  volumes: []
+  #  - name: custom-tools
+  #    emptyDir: {}
+
+  # -- Assign custom [affinity] rules to the deployment
+  # @default -- `{}` (defaults to global.affinity preset)
+  affinity: {}
+
+  # -- Assign custom [TopologySpreadConstraints] rules to the scheduler
+  # @default -- `[]` (defaults to global.topologySpreadConstraints)
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## If labelSelector is left out, it will default to the labelSelector configuration of the deployment
+  topologySpreadConstraints: []
+    # - maxSkew: 1
+    #   topologyKey: topology.kubernetes.io/zone
+    #   whenUnsatisfiable: DoNotSchedule
+
+  # -- Deployment strategy to be added to the scheduler Deployment
+  deploymentStrategy: {}
+    # type: RollingUpdate
+    # rollingUpdate:
+    #   maxSurge: 25%
+    #   maxUnavailable: 25%
+
+  # -- Rollout analysis to be added to the scheduler Rollout
+  rolloutAnalysis: {}
+    # successfulRunHistoryLimit: 1
+    # unsuccessfulRunHistoryLimit: 3
+
+  serviceAccount:
+    # -- Create global service account
+    create: true
+    # -- Server service account name
+    name: application-template-scheduler
+    # -- Annotations applied to created service account
+    annotations: {}
+    # -- Labels applied to created service account
+    labels: {}
+    # -- Automount API credentials for the Service Account
+    automountServiceAccountToken: false
+    # -- Image pull Secrets for the Service Account
+    imagePullSecrets: []
+
+  istio:
+    # -- Create istio resources
+    enabled: false
+
+    # -- ingress gateway configuration
+    ingressGateways: []
+    # -- virtualService configuration
+    virtualServices: []
+    # -- destinationRule configuration
+    destinationRules: []

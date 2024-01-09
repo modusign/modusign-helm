@@ -1,0 +1,29 @@
+{{- if .Values.server.enabled }}
+{{- if .Values.server.istio.enabled }}
+{{- range $index, $virtualService := .Values.server.istio.virtualServices }}
+{{- with $virtualService }}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "application.labels" $ | nindent 4 }}
+spec:
+  gateways:
+    {{- toYaml .gateways | nindent 4 }}
+  hosts:
+    {{- toYaml .hosts | nindent 4 }}
+  http:
+    {{- toYaml .http | nindent 4 }}
+  {{- with .retries }}
+  retries:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .timeout }}
+  timeout: {{ . }}
+  {{- end }}
+{{- end }}
+---
+{{- end }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,18 @@
+{{- if .Values.worker.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "application.worker.name" . }}
+  labels:
+    {{- include "application.labels" . | nindent 4 }}
+spec:
+  ports:
+{{- range .Values.worker.ports }}
+    - name: {{ .name }}
+      port: {{ .port }}
+      targetPort: {{ .targetPort }}
+      protocol: TCP
+{{- end }}
+  selector:
+    {{- include "application.worker.selectorLabels" . | nindent 4 }}
+{{- end }}
