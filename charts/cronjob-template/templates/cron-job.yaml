@@ -1,0 +1,144 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ template "application.name" . }}
+  labels:
+    {{- include "application.labels" . | nindent 4 }}
+spec:
+  schedule: {{ .Values.cronJob.schedule | quote }}
+  {{- if .Values.cronJob.timeZone }}
+  timeZone: {{ .Values.cronJob.timeZone }}
+  {{- end }}
+  {{- if .Values.cronJob.concurrencyPolicy }}
+  concurrencyPolicy: {{ .Values.cronJob.concurrencyPolicy }}
+  {{- end }}
+  {{- if .Values.cronJob.successfulJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ .Values.cronJob.successfulJobsHistoryLimit }}
+  {{- end }}
+  {{- if .Values.cronJob.failedJobsHistoryLimit}}
+  failedJobsHistoryLimit: {{ .Values.cronJob.failedJobsHistoryLimit }}
+  {{- end }}
+  jobTemplate:
+    {{- if .Values.job.completions }}
+    completions: {{ .Values.job.completions }}
+    {{- end }}
+    {{- if .Values.job.parallelism }}
+    parallelism: {{ .Values.job.parallelism }}
+    {{- end }}
+    # Job metadata
+    metadata:
+      name: {{ template "application.name" . }}
+      labels:
+        {{- include "application.labels" . | nindent 8 }}
+    spec:
+      # Pod metadata
+      metadata:
+        name: {{ template "application.name" . }}
+        annotations:
+          {{- with .Values.podAnnotations }}
+          {{- range $key, $value := . }}
+          {{ $key }}: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+        labels:
+          {{- include "application.labels" . | nindent 10 }}
+          {{- with .Values.podLabels }}
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
+      template:
+        spec:
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- if .Values.terminationGracePeriodSeconds }}
+          terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+          {{- end }}
+          serviceAccountName: {{ include "serviceAccountName" . }}
+          containers:
+          - name: {{ .Values.name }}
+            {{- with .Values.image.repository }}
+            {{- if contains "/" $.Values.image.repository }}
+            image: "{{ . }}:{{ $.Values.image.tag }}"
+            {{- else }}
+            image: "{{ $.Values.image.hub }}/{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+            {{- end }}
+            {{- end }}
+            imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+            {{- if .Values.extraCommands }}
+            command:
+            {{- with .Values.extraCommands }}
+              {{- toYaml . | nindent 8 }}
+            {{- end }}
+            {{- end }}
+            {{- if .Values.extraArgs }}
+            args:
+            {{- with .Values.extraArgs }}
+              {{- toYaml . | nindent 8 }}
+            {{- end }}
+            {{- end }}
+            envFrom:
+            {{- if .Values.env  }}
+              - configMapRef:
+                  name: {{ include "application.name" . }}-env
+            {{- end }}
+            {{- if .Values.vault.enabled  }}
+              - secretRef:
+                  name: {{ include "application.name" . }}
+            {{- end }}
+            {{- with .Values.envFrom }}
+              {{- toYaml . | nindent 10 }}
+            {{- end }}
+            {{- with .Values.volumeMounts }}
+            volumeMounts:
+              {{- toYaml . | nindent 8 }}
+            {{- end }}
+            {{- with .Values.livenessProbe }}
+            livenessProbe:
+              httpGet:
+                path: {{ .httpGet.path }}
+                port: {{ .httpGet.port }}
+              initialDelaySeconds: {{ .initialDelaySeconds }}
+              periodSeconds: {{ .periodSeconds }}
+              timeoutSeconds: {{ .timeoutSeconds }}
+              successThreshold: {{ .successThreshold }}
+              failureThreshold: {{ .failureThreshold }}
+            {{- end }}
+            {{- with .Values.readinessProbe }}
+            readinessProbe:
+              httpGet:
+                path: {{ .httpGet.path }}
+                port: {{ .httpGet.port }}
+              initialDelaySeconds: {{ .initialDelaySeconds }}
+              periodSeconds: {{ .periodSeconds }}
+              timeoutSeconds: {{ .timeoutSeconds }}
+              successThreshold: {{ .successThreshold }}
+              failureThreshold: {{ .failureThreshold }}
+            {{- end }}
+            resources:
+              {{- toYaml .Values.resources | nindent 10 }}
+            {{- with .Values.lifecycle }}
+            lifecycle:
+              {{- toYaml . | nindent 10 }}
+            {{- end }}
+          {{- with .Values.initContainers }}
+          initContainers:
+            {{- tpl (toYaml .) $ | nindent 6 }}
+          {{- end }}
+          {{- with .Values.affinity | default .Values.affinity  }}
+          affinity:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.nodeSelector | default .Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.tolerations | default .Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.volumes }}
+          volumes:
+            {{- toYaml . | nindent 6 }}
+          {{- end }}
