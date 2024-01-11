@@ -50,7 +50,7 @@ spec:
         spec:
           {{- with .Values.imagePullSecrets }}
           imagePullSecrets:
-            {{- toYaml . | nindent 8 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- if .Values.terminationGracePeriodSeconds }}
           terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
@@ -69,13 +69,13 @@ spec:
             {{- if .Values.extraCommands }}
             command:
             {{- with .Values.extraCommands }}
-              {{- toYaml . | nindent 8 }}
+              {{- toYaml . | nindent 14 }}
             {{- end }}
             {{- end }}
             {{- if .Values.extraArgs }}
             args:
             {{- with .Values.extraArgs }}
-              {{- toYaml . | nindent 8 }}
+              {{- toYaml . | nindent 14 }}
             {{- end }}
             {{- end }}
             envFrom:
@@ -88,11 +88,11 @@ spec:
                   name: {{ include "application.name" . }}
             {{- end }}
             {{- with .Values.envFrom }}
-              {{- toYaml . | nindent 10 }}
+              {{- toYaml . | nindent 14 }}
             {{- end }}
             {{- with .Values.volumeMounts }}
             volumeMounts:
-              {{- toYaml . | nindent 8 }}
+              {{- toYaml . | nindent 14 }}
             {{- end }}
             {{- with .Values.livenessProbe }}
             livenessProbe:
@@ -117,28 +117,28 @@ spec:
               failureThreshold: {{ .failureThreshold }}
             {{- end }}
             resources:
-              {{- toYaml .Values.resources | nindent 10 }}
+              {{- toYaml .Values.resources | nindent 14 }}
             {{- with .Values.lifecycle }}
             lifecycle:
-              {{- toYaml . | nindent 10 }}
+              {{- toYaml . | nindent 14 }}
             {{- end }}
           {{- with .Values.initContainers }}
           initContainers:
-            {{- tpl (toYaml .) $ | nindent 6 }}
+            {{- tpl (toYaml .) $ | nindent 10 }}
           {{- end }}
           {{- with .Values.affinity | default .Values.affinity  }}
           affinity:
-            {{- toYaml . | nindent 8 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- with .Values.nodeSelector | default .Values.nodeSelector }}
           nodeSelector:
-            {{- toYaml . | nindent 8 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- with .Values.tolerations | default .Values.tolerations }}
           tolerations:
-            {{- toYaml . | nindent 8 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- with .Values.volumes }}
           volumes:
-            {{- toYaml . | nindent 6 }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
