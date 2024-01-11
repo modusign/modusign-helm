@@ -29,6 +29,10 @@ job:
   # @default -- `1` (defaults to 1 if not specified)
   parallelism: null
 
+# Either: `Never` or `OnFailure`
+# @default -- `OnFailure`
+restartPolicy: OnFailure
+
 # Default image used by all components
 image:
   # -- hub applied to all deployments
