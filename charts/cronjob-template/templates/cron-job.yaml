@@ -32,21 +32,21 @@ spec:
       labels:
         {{- include "application.labels" . | nindent 8 }}
     spec:
-      # Pod metadata
-      metadata:
-        name: {{ template "application.name" . }}
-        annotations:
-          {{- with .Values.podAnnotations }}
-          {{- range $key, $value := . }}
-          {{ $key }}: {{ $value | quote }}
-          {{- end }}
-          {{- end }}
-        labels:
-          {{- include "application.labels" . | nindent 10 }}
-          {{- with .Values.podLabels }}
-            {{- toYaml . | nindent 10 }}
-          {{- end }}
       template:
+        # Pod metadata
+        metadata:
+          name: {{ template "application.name" . }}
+          annotations:
+            {{- with .Values.podAnnotations }}
+            {{- range $key, $value := . }}
+            {{ $key }}: {{ $value | quote }}
+            {{- end }}
+            {{- end }}
+          labels:
+            {{- include "application.labels" . | nindent 12 }}
+            {{- with .Values.podLabels }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
         spec:
           {{- with .Values.imagePullSecrets }}
           imagePullSecrets:
