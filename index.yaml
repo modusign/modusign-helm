@@ -36,6 +36,22 @@ entries:
   cronjob-template:
   - apiVersion: v2
     appVersion: v1.0.0
+    created: "2024-01-11T07:42:48.659646329Z"
+    description: A Helm chart for CronJob
+    digest: a4501630dc48191040955efd87b06af6215e8dd8e74fd45d6beaa3c590b6a64f
+    home: https://app.modusign.co.kr
+    keywords:
+    - modusign
+    kubeVersion: '>=1.23'
+    maintainers:
+    - name: modusign
+      url: https://github.com/modusign
+    name: cronjob-template
+    urls:
+    - https://github.com/modusign/modusign-helm/releases/download/cronjob-template-1.0.2/cronjob-template-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
+    appVersion: v1.0.0
     created: "2024-01-11T07:20:46.224668118Z"
     description: A Helm chart for CronJob
     digest: 29a62c68676cc295a4bb13c7d1f27edd9e166c752d01200fe58b005e3b9bf113
@@ -66,4 +82,4 @@ entries:
     urls:
     - https://github.com/modusign/modusign-helm/releases/download/cronjob-template-1.0.0/cronjob-template-1.0.0.tgz
     version: 1.0.0
-generated: "2024-01-11T07:20:46.224700469Z"
+generated: "2024-01-11T07:42:48.659666687Z"
