@@ -13,7 +13,7 @@ spec:
   trafficPolicy:
     {{- toYaml .trafficPolicy | nindent 4 }}
   subsets:
-    {{- toYaml .subsets | nindent 4 }}
+    {{- tpl (.subsets | nindent 4) $ }}
 {{- end }}
 ---
 {{- end }}
