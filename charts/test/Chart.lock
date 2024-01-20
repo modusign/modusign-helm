@@ -1,6 +1,0 @@
-dependencies:
-- name: application-template
-  repository: file://../application-template
-  version: 1.3.0
-digest: sha256:d131828c7c36ef739435966e685e3ece8444e6a5f313f8eb158c297279209398
-generated: "2024-01-20T13:18:45.50094+09:00"
