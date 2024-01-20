@@ -2,19 +2,19 @@
 Expand the name of the chart.
 */}}
 {{- define "application.name" -}}
-{{- default .Chart.Name .Values.server.name | trunc 63 | trimSuffix "-" }}
+{{-  .Values.server.name | default (printf "%s-%s" .Release.Name "server") | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{- define "application.server.name" -}}
-{{- default .Chart.Name .Values.server.name | trunc 63 | trimSuffix "-" }}
+{{- .Values.server.name | default (printf "%s-%s" .Release.Name "server") | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{- define "application.worker.name" -}}
-{{- default .Chart.Name .Values.worker.name | trunc 63 | trimSuffix "-" }}
+{{- .Values.worker.name | default (printf "%s-%s" .Release.Name "worker") | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{- define "application.scheduler.name" -}}
-{{- default .Chart.Name .Values.scheduler.name | trunc 63 | trimSuffix "-" }}
+{{- .Values.scheduler.name | default (printf "%s-%s" .Release.Name "scheduler" ) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -45,15 +45,18 @@ Create chart name and version as used by the chart label.
 {{/*
 Common labels
 */}}
-{{- define "application.labels" -}}
-helm.sh/chart: {{ .Release.Name }}
-app.kubernetes.io/version: {{ .Release.Revision | quote }}
+{{- define "application.commonLabels" -}}
+helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.modusign.co.kr/zone: {{ .Release.Namespace }}
+app.kubernetes.io/env: {{ .Values.global.runtimeEnv | default "stage" }}
+env: {{ .Values.global.runtimeEnv | default "stage" }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/part-of: {{ .Release.Name }}
 {{- if .Values.global.observability.datadog.admissionController.enabled }}
-tags.datadoghq.com/env: {{ default "stage" .Values.global.env.DD_ENV}}
+tags.datadoghq.com/env: {{ .Values.global.env.DD_ENV | .Values.global.runtimeEnv | default "stage" }}
 tags.datadoghq.com/service: {{ .Release.Name }}
-tags.datadoghq.com/version: {{ .Release.Revision | quote }}
+tags.datadoghq.com/version: {{ .Values.global.image.tag | quote }}
 {{- end }}
 {{- with .Values.global.additionalLabels }}
 {{ toYaml . }}
@@ -61,40 +64,62 @@ tags.datadoghq.com/version: {{ .Release.Revision | quote }}
 {{- end }}
 
 {{/*
-Selector labels
+Each Component labels
 */}}
-{{- define "application.server.selectorLabels" -}}
-app: {{ (.Values.server.name | default .Chart.Name )| lower}}
-version: {{ .Chart.Version }}
+{{- define "application.server.labels" -}}
+{{ include "application.commonLabels" . }}
+app.kubernetes.io/name: {{ include "application.server.name" . }}
+app.kubernetes.io/version: {{ include "application.server.image.tag" . }}
+app.kubernetes.io/component: server
+
 {{- end }}
 
-{{- define "application.scheduler.selectorLabels" -}}
-app: {{ (.Values.scheduler.name | default .Chart.Name )| lower}}
-version: {{ .Chart.Version | quote }}
+{{- define "application.scheduler.labels" -}}
+{{ include "application.commonLabels" . }}
+app.kubernetes.io/name: {{ include "application.scheduler.name" . }}
+app.kubernetes.io/version: {{ include "application.scheduler.image.tag" . }}
+app.kubernetes.io/component: scheduler
 {{- end }}
 
-{{- define "application.worker.selectorLabels" -}}
-app: {{ (.Values.worker.name | default .Chart.Name )| lower}}
-version: {{ .Chart.Version | quote }}
+{{- define "application.worker.labels" -}}
+{{ include "application.commonLabels" . }}
+app.kubernetes.io/name: {{ include "application.worker.name" . }}
+app.kubernetes.io/version: {{ include "application.worker.image.tag" . }}
+app.kubernetes.io/component: worker
 {{- end }}
 
 
 {{/*
-matchLabels labels
+Image tags(version)
 */}}
-{{- define "application.server.matchLabels" -}}
-app: {{ (.Values.server.name | default .Chart.Name )| lower}}
-version: {{ .Chart.Version }}
+{{- define "application.server.image.tag" -}}
+{{ .Values.server.image.tag | default .Values.global.image.tag }}
 {{- end }}
 
-{{- define "application.scheduler.matchLabels" -}}
-app: {{ (.Values.scheduler.name | default .Chart.Name )| lower}}
-version: {{ .Chart.Version | quote }}
+{{- define "application.scheduler.image.tag" -}}
+{{ .Values.scheduler.image.tag | default .Values.global.image.tag }}
 {{- end }}
 
-{{- define "application.worker.matchLabels" -}}
-app: {{ (.Values.worker.name | default .Chart.Name )| lower}}
-version: {{ .Chart.Version | quote }}
+{{- define "application.worker.image.tag" -}}
+{{ .Values.worker.image.tag | default .Values.global.image.tag }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "application.server.selectorLabels" -}}
+app: {{ include "application.server.name" . }}
+version:  {{ include "application.server.image.tag" . }}
+{{- end }}
+
+{{- define "application.scheduler.selectorLabels" -}}
+app: {{ include "application.scheduler.name" . }}
+version: {{ include "application.scheduler.image.tag" . }}
+{{- end }}
+
+{{- define "application.worker.selectorLabels" -}}
+app: {{ include "application.worker.name" . }}
+version: {{ include "application.worker.image.tag" . }}
 {{- end }}
 
 

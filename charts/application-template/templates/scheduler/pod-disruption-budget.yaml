@@ -5,7 +5,7 @@ kind: PodDisruptionBudget
 metadata:
   name: {{ include "application.scheduler.name" . }}
   labels:
-    {{- include "application.labels" . | nindent 4 }}
+    {{- include "application.scheduler.labels" . | nindent 4 }}
 spec:
   {{- with .Values.scheduler.pdb.maxUnavailable }}
   maxUnavailable: {{ . }}
@@ -14,6 +14,6 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "application.scheduler.matchLabels" . | nindent 6 }}
+      {{- include "application.scheduler.selectorLabels" . | nindent 6 }}
 {{- end }}
 {{- end }}

@@ -1,0 +1,38 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: check-yaml
+        exclude: '((charts|chart)/(.*)|(.*).tpl(.*)|(.*).tmpl(.*))'
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-case-conflict
+      - id: check-added-large-files
+        args:
+          - '--maxkb=5120'
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.4.0
+    hooks:
+      - id: check-merge-conflict
+  - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
+    rev: v5.0.0
+    hooks:
+      - id: commitlint
+        stages: [commit-msg]
+        additional_dependencies: ['@commitlint/config-conventional']
+  - repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: 2.1.5  # or specific git tag
+    hooks:
+      - id: shfmt
+        name: shfmt
+  - repo: https://github.com/gruntwork-io/pre-commit
+    hooks:
+      - id: helmlint
+    rev: v0.1.17
+  - repo: https://github.com/norwoodj/helm-docs
+    hooks:
+      - id: helm-docs
+        files: (README\.md\.gotmpl|(Chart|requirements|values)\.yaml)$
+        args:
+          - --template-files=README.md.gotmpl
+    rev: v1.6.0

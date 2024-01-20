@@ -1,6 +1,6 @@
 # application-template
 
-![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for Modusign Applications
 
@@ -37,6 +37,7 @@ Kubernetes: `>=1.23`
 | global.podLabels | object | `{}` | Labels for the all deployed pods |
 | global.revisionHistoryLimit | int | `3` | Number of old deployment ReplicaSets to retain. The rest will be garbage collected. |
 | global.rolloutAnalysis | object | `{}` | Rollout analysis to be added to the all Rollout |
+| global.runtimeEnv | string | `"stage"` | Runtime env for app.kubernetes.io/env, env, tags.datadoghq.com/env labels |
 | global.serviceAccount.annotations | object | `{}` | Annotations applied to created service account |
 | global.serviceAccount.automountServiceAccountToken | bool | `false` | Automount API credentials for the Service Account |
 | global.serviceAccount.imagePullSecrets | list | `[]` | Image pull Secrets for the Service Account |
@@ -71,7 +72,6 @@ Kubernetes: `>=1.23`
 | scheduler.istio.ingressGateways | list | `[]` | ingress gateway configuration |
 | scheduler.istio.virtualServices | list | `[]` | virtualService configuration |
 | scheduler.lifecycle | object | `{}` | Specify postStart and preStop lifecycle hooks for your container |
-| scheduler.name | string | `"application-template-scheduler"` | scheduler name |
 | scheduler.nodeSelector | object | `{}` (defaults to global.nodeSelector) | [Node selector] |
 | scheduler.pdb.annotations | object | `{}` | Annotations to be added to scheduler pdb |
 | scheduler.pdb.enabled | bool | `false` | Deploy a [PodDisruptionBudget] for the scheduler |
@@ -127,7 +127,6 @@ Kubernetes: `>=1.23`
 | server.istio.ingressGateways | list | `[]` | ingress gateway configuration |
 | server.istio.virtualServices | list | `[]` | virtualService configuration |
 | server.lifecycle | object | `{}` | Specify postStart and preStop lifecycle hooks for your container |
-| server.name | string | `"application-template"` | server name |
 | server.nodeSelector | object | `{}` (defaults to global.nodeSelector) | [Node selector] |
 | server.pdb.annotations | object | `{}` | Annotations to be added to server pdb |
 | server.pdb.enabled | bool | `true` | Deploy a [PodDisruptionBudget] for the server |
@@ -181,7 +180,6 @@ Kubernetes: `>=1.23`
 | worker.istio.ingressGateways | list | `[]` | ingress gateway configuration |
 | worker.istio.virtualServices | list | `[]` | virtualService configuration |
 | worker.lifecycle | object | `{}` | Specify postStart and preStop lifecycle hooks for your container |
-| worker.name | string | `"application-template-worker"` | worker name |
 | worker.nodeSelector | object | `{}` (defaults to global.nodeSelector) | [Node selector] |
 | worker.pdb.annotations | object | `{}` | Annotations to be added to worker pdb |
 | worker.pdb.enabled | bool | `false` | Deploy a [PodDisruptionBudget] for the worker |

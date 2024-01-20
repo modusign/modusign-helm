@@ -12,7 +12,7 @@ metadata:
   name: {{ template "application.worker.name" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "application.labels" . | nindent 4 }}
+    {{- include "application.worker.labels" . | nindent 4 }}
 spec:
   {{- with (mergeOverwrite (deepCopy .Values.global.deploymentStrategy) .Values.worker.deploymentStrategy) }}
   strategy:
@@ -25,7 +25,7 @@ spec:
   revisionHistoryLimit: {{ .Values.global.revisionHistoryLimit }}
   selector:
     matchLabels:
-      {{- include "application.worker.matchLabels" . | nindent 6 }}
+      {{- include "application.worker.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -42,7 +42,7 @@ spec:
         {{- end }}
       labels:
         {{- include "application.worker.selectorLabels" . | nindent 8 }}
-        {{- include "application.labels" . | nindent 8 }}
+        {{- include "application.worker.labels" . | nindent 8 }}
         {{- with (mergeOverwrite (deepCopy .Values.global.podLabels) .Values.worker.podLabels) }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -59,9 +59,9 @@ spec:
       - name: {{ .Values.worker.name }}
         {{- with (.Values.worker.image.repository | default .Values.global.image.repository) }}
         {{- if contains "/" ($.Values.worker.image.repository | default $.Values.global.image.repository) }}
-        image: "{{ . }}:{{ $.Values.worker.image.tag | default $.Values.global.image.tag }}"
+        image: "{{ . }}:{{- include "application.worker.image.tag" $ }}"
         {{- else }}
-        image: "{{ $.Values.worker.image.hub | default $.Values.global.image.hub }}/{{ $.Values.worker.image.repository | default $.Values.global.image.repository }}:{{ $.Values.worker.image.tag | default $.Values.global.image.tag }}"
+        image: "{{ $.Values.worker.image.hub | default $.Values.global.image.hub }}/{{ $.Values.worker.image.repository | default $.Values.global.image.repository }}:{{- include "application.worker.image.tag" $ }}"
         {{- end }}
         {{- end }}
         imagePullPolicy: {{ .Values.worker.image.imagePullPolicy | default .Values.global.image.imagePullPolicy }}
@@ -165,7 +165,7 @@ spec:
         {{- if not $constraint.labelSelector }}
         labelSelector:
           matchLabels:
-            {{- include "application.worker.matchLabels" $ | nindent 12 }}
+            {{- include "application.worker.selectorLabels" $ | nindent 12 }}
         {{- end }}
         {{- end }}
       {{- end }}

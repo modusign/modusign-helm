@@ -5,7 +5,7 @@ kind: HorizontalPodAutoscaler
 metadata:
     name: {{ include "application.worker.name" . }}
     labels:
-    {{- include "application.labels" . | nindent 8 }}
+    {{- include "application.worker.labels" . | nindent 8 }}
 spec:
     {{- with .Values.worker.autoscaling.scaleTargetRef }}
     scaleTargetRef:

@@ -5,7 +5,7 @@ kind: PodDisruptionBudget
 metadata:
   name: {{ include "application.worker.name" . }}
   labels:
-    {{- include "application.labels" . | nindent 4 }}
+    {{- include "application.worker.labels" . | nindent 4 }}
 spec:
   {{- with .Values.worker.pdb.maxUnavailable }}
   maxUnavailable: {{ . }}
@@ -14,6 +14,6 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "application.worker.matchLabels" . | nindent 6 }}
+      {{- include "application.worker.selectorLabels" . | nindent 6 }}
 {{- end }}
 {{- end }}

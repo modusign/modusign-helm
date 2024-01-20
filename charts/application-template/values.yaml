@@ -1,5 +1,8 @@
 ## global
 global:
+  # -- Runtime env for app.kubernetes.io/env, env, tags.datadoghq.com/env labels
+  runtimeEnv: stage
+
   # -- Common labels for the all resources
   additionalLabels: {}
 
@@ -110,7 +113,7 @@ global:
 server:
   enabled: true
   # -- server name
-  name: application-template
+  # name: application-template
 
   # -- set deployment kind to Rollouts
   # rollout:
@@ -348,7 +351,7 @@ worker:
   enabled: false
 
   # -- worker name
-  name: application-template-worker
+  # name: application-template-worker
 
   # -- set deployment kind to Rollouts
   # rollout:
@@ -589,7 +592,7 @@ scheduler:
   enabled: false
 
   # -- scheduler name
-  name: application-template-scheduler
+  # name: application-template-scheduler
 
   # -- set deployment kind to Rollouts
   # rollout:

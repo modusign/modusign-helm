@@ -5,7 +5,7 @@ kind: HorizontalPodAutoscaler
 metadata:
     name: {{ include "application.server.name" . }}
     labels:
-    {{- include "application.labels" . | nindent 8 }}
+    {{- include "application.server.labels" . | nindent 8 }}
 spec:
     {{- with .Values.server.autoscaling.scaleTargetRef }}
     scaleTargetRef:
