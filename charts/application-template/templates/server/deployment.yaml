@@ -25,7 +25,7 @@ spec:
   revisionHistoryLimit: {{ .Values.global.revisionHistoryLimit }}
   selector:
     matchLabels:
-      {{- include "application.server.matchLabels" . | nindent 6 }}
+      {{- include "application.server.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -165,7 +165,7 @@ spec:
         {{- if not $constraint.labelSelector }}
         labelSelector:
           matchLabels:
-            {{- include "application.server.matchLabels" $ | nindent 12 }}
+            {{- include "application.server.selectorLabels" $ | nindent 12 }}
         {{- end }}
         {{- end }}
       {{- end }}

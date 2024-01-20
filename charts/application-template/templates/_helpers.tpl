@@ -50,7 +50,7 @@ helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.modusign.co.kr/zone: {{ .Release.Namespace }}
 app.kubernetes.io/env: {{ .Values.global.runtimeEnv | default "stage" }}
-env: {{ .Values.global.env | default "stage" }}
+env: {{ .Values.global.runtimeEnv | default "stage" }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/part-of: {{ .Release.Name }}
 {{- if .Values.global.observability.datadog.admissionController.enabled }}
@@ -120,25 +120,6 @@ version: {{ include "application.scheduler.image.tag" . }}
 {{- define "application.worker.selectorLabels" -}}
 app: {{ include "application.worker.name" . }}
 version: {{ include "application.worker.image.tag" . }}
-{{- end }}
-
-
-{{/*
-matchLabels labels
-*/}}
-{{- define "application.server.matchLabels" -}}
-app: {{ (.Values.server.name | default .Chart.Name )| lower}}
-version: {{ .Chart.Version }}
-{{- end }}
-
-{{- define "application.scheduler.matchLabels" -}}
-app: {{ (.Values.scheduler.name | default .Chart.Name )| lower}}
-version: {{ .Chart.Version | quote }}
-{{- end }}
-
-{{- define "application.worker.matchLabels" -}}
-app: {{ (.Values.worker.name | default .Chart.Name )| lower}}
-version: {{ .Chart.Version | quote }}
 {{- end }}
 
 
