@@ -12,7 +12,7 @@ metadata:
   name: {{ template "application.worker.name" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "application.labels" . | nindent 4 }}
+    {{- include "application.worker.labels" . | nindent 4 }}
 spec:
   {{- with (mergeOverwrite (deepCopy .Values.global.deploymentStrategy) .Values.worker.deploymentStrategy) }}
   strategy:
@@ -46,7 +46,7 @@ spec:
         {{- end }}
       labels:
         {{- include "application.worker.selectorLabels" . | nindent 8 }}
-        {{- include "application.labels" . | nindent 8 }}
+        {{- include "application.worker.labels" . | nindent 8 }}
         {{- with (mergeOverwrite (deepCopy .Values.global.podLabels) .Values.worker.podLabels) }}
           {{- toYaml . | nindent 8 }}
         {{- end }}

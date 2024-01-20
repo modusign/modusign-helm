@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: {{ include "application.server.name" . }}
   labels:
-    {{- include "application.labels" . | nindent 4 }}
+    {{- include "application.server.labels" . | nindent 4 }}
 spec:
   ports:
 {{- range .Values.server.ports }}

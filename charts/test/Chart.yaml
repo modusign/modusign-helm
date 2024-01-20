@@ -1,0 +1,32 @@
+apiVersion: v2
+name: document
+version: 1.0.0
+kubeVersion: '>=1.23'
+description: modusign document service
+type: application
+keywords:
+  - document
+  - modusign
+home: https://app.modusign.co.kr
+sources:
+  - https://github.com/modusign/document
+dependencies:
+  - name: application-template
+    version: 1.3.0
+    repository: "file://../application-template"
+    alias: application-template
+maintainers:
+  - name: KIM TAEYOUNG
+    email: ty.kim@modusign.co.kr
+    url: https://github.com/orgs/modusign/people/kty1965
+  - name: CHOI HYUNSEOK
+    email: hs.choi@modusign.co.kr
+    url: https://github.com/orgs/modusign/people/hschoi1104
+  - name: KIM HYUNYOUNG
+    email: hy.kim@modusign.co.kr
+    url: https://github.com/orgs/modusign/people/atobaum
+icon: https://app.modusign.co.kr/authzentication/v3.111.4/favicon/favicon-16x16.png
+appVersion: 1.0.0
+deprecated: false
+annotations:
+  service: document

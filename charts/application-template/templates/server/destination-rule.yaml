@@ -7,7 +7,7 @@ kind: DestinationRule
 metadata:
   name: {{ .name }}
   labels:
-    {{- include "application.labels" $ | nindent 4 }}
+    {{- include "application.server.labels" $ | nindent 4 }}
 spec:
   host: {{ .host }}
   trafficPolicy:

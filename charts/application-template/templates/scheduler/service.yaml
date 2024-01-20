@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: {{ include "application.scheduler.name" . }}
   labels:
-    {{- include "application.labels" . | nindent 4 }}
+    {{- include "application.scheduler.labels" . | nindent 4 }}
 spec:
   ports:
 {{- range .Values.scheduler.ports }}

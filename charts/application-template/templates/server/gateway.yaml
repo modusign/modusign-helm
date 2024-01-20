@@ -7,7 +7,7 @@ kind: Gateway
 metadata:
   name: {{ .name }}
   labels:
-    {{- include "application.labels" $ | nindent 4 }}
+    {{- include "application.server.labels" $ | nindent 4 }}
 spec:
   selector:
     {{- toYaml .selector | nindent 4}}
