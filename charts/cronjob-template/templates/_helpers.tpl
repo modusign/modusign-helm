@@ -24,7 +24,7 @@ env: {{ .Values.runtimeEnv | default "stage" }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/part-of: {{ .Release.Name }}
 {{- if .Values.observability.datadog.admissionController.enabled }}
-tags.datadoghq.com/env: {{ .Values.env.DD_ENV | .Values.runtimeEnv | default "stage" }}
+tags.datadoghq.com/env: {{ coalesce .Values.env.DD_ENV .Values.runtimeEnv "stage" }}
 tags.datadoghq.com/service: {{ .Release.Name }}
 tags.datadoghq.com/version: {{ .Values.image.tag | quote }}
 {{- end }}
