@@ -4,7 +4,8 @@ name: cronjob-template
 # -- Common labels for the all resources
 additionalLabels: {}
 
-runtimeEnv: "stage"
+# -- Runtime env for app.kubernetes.io/env, env, tags.datadoghq.com/env labels
+runtimeEnv: stage
 
 # -- CronJob resource configuration
 cronJob:
