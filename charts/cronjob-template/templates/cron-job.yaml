@@ -4,7 +4,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   name: {{ template "application.name" . }}
   labels:
-    {{- include "application.labels" . | nindent 4 }}
+    {{- include "application.cronJob.labels" . | nindent 4 }}
 spec:
   schedule: {{ .Values.cronJob.schedule | quote }}
   {{- if .Values.cronJob.timeZone }}
@@ -30,7 +30,7 @@ spec:
     metadata:
       name: {{ template "application.name" . }}
       labels:
-        {{- include "application.labels" . | nindent 8 }}
+        {{- include "application.cronJob.labels" . | nindent 8 }}
     spec:
       template:
         # Pod metadata
@@ -43,7 +43,7 @@ spec:
             {{- end }}
             {{- end }}
           labels:
-            {{- include "application.labels" . | nindent 12 }}
+            {{- include "application.cronJob.labels" . | nindent 12 }}
             {{- with .Values.podLabels }}
               {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -61,9 +61,9 @@ spec:
           - name: {{ .Values.name }}
             {{- with .Values.image.repository }}
             {{- if contains "/" $.Values.image.repository }}
-            image: "{{ . }}:{{ $.Values.image.tag }}"
+            image: "{{ . }}:{{- include "application.cronJob.image.tag" $ }}"
             {{- else }}
-            image: "{{ $.Values.image.hub }}/{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+            image: "{{ $.Values.image.hub }}/{{ $.Values.image.repository }}:{{- include "application.cronJob.image.tag" $ }}"
             {{- end }}
             {{- end }}
             imagePullPolicy: {{ .Values.image.imagePullPolicy }}

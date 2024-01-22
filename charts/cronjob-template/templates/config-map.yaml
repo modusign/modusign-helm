@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: {{ include "application.name" . }}-env
   labels:
-    {{- include "application.labels" . | nindent 4 }}
+    {{- include "application.cronJob.labels" . | nindent 4 }}
 data:
   {{- toYaml .Values.env | nindent 2 }}
 {{- end }}
