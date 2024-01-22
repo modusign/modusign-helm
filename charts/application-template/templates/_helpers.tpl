@@ -71,7 +71,6 @@ Each Component labels
 app.kubernetes.io/name: {{ include "application.server.name" . }}
 app.kubernetes.io/version: {{ include "application.server.image.tag" . }}
 app.kubernetes.io/component: server
-
 {{- end }}
 
 {{- define "application.scheduler.labels" -}}

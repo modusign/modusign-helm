@@ -4,6 +4,9 @@ name: cronjob-template
 # -- Common labels for the all resources
 additionalLabels: {}
 
+# -- Runtime env for app.kubernetes.io/env, env, tags.datadoghq.com/env labels
+runtimeEnv: stage
+
 # -- CronJob resource configuration
 cronJob:
   # -- minute(0-59) hour(0-23) day-of-month(1-31) month(1-12) day-of-week(0-6, 0:Sunday)

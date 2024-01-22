@@ -1,6 +1,6 @@
 # cronjob-template
 
-![Version: 1.0.3](https://img.shields.io/badge/Version-1.0.3-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for CronJob
 
@@ -50,6 +50,7 @@ Kubernetes: `>=1.23`
 | podLabels | object | `{}` | Labels for the all deployed pods |
 | resources | object | `{"limits":{"cpu":"800m","memory":"1600Mi"},"requests":{"cpu":"400m","memory":"800Mi"}}` | Resource limits and requests for the server |
 | restartPolicy | string | `"OnFailure"` |  |
+| runtimeEnv | string | `"stage"` | Runtime env for app.kubernetes.io/env, env, tags.datadoghq.com/env labels |
 | serviceAccount.annotations | object | `{}` | Annotations applied to created service account |
 | serviceAccount.automountServiceAccountToken | bool | `false` | Automount API credentials for the Service Account |
 | serviceAccount.create | bool | `true` | Create server service account |
