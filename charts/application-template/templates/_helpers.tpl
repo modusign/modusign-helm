@@ -54,7 +54,7 @@ env: {{ .Values.global.runtimeEnv | default "stage" }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/part-of: {{ .Release.Name }}
 {{- if .Values.global.observability.datadog.admissionController.enabled }}
-tags.datadoghq.com/env: {{ .Values.global.env.DD_ENV | .Values.global.runtimeEnv | default "stage" }}
+tags.datadoghq.com/env: {{ coalesce .Values.global.env.DD_ENV .Values.global.runtimeEnv "stage" }}
 tags.datadoghq.com/service: {{ .Release.Name }}
 tags.datadoghq.com/version: {{ .Values.global.image.tag | quote }}
 {{- end }}
