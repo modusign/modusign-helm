@@ -108,17 +108,14 @@ Selector labels
 */}}
 {{- define "application.server.selectorLabels" -}}
 app: {{ include "application.server.name" . }}
-version:  {{ include "application.server.image.tag" . }}
 {{- end }}
 
 {{- define "application.scheduler.selectorLabels" -}}
 app: {{ include "application.scheduler.name" . }}
-version: {{ include "application.scheduler.image.tag" . }}
 {{- end }}
 
 {{- define "application.worker.selectorLabels" -}}
 app: {{ include "application.worker.name" . }}
-version: {{ include "application.worker.image.tag" . }}
 {{- end }}
 
 
