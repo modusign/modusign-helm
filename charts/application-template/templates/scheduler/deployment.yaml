@@ -103,6 +103,11 @@ spec:
             containerPort: {{ .targetPort }}
             protocol: TCP
         {{- end }}
+        {{- if .Values.global.observability.prometheus.enabled }}
+          - name: metrics
+            port: {{ .Values.global.observability.prometheus.port }}
+            protocol: TCP
+        {{- end }}
         {{- with .Values.scheduler.livenessProbe }}
         livenessProbe:
           httpGet:
