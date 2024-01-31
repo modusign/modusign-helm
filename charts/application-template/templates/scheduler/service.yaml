@@ -13,6 +13,13 @@ spec:
       targetPort: {{ .targetPort }}
       protocol: TCP
 {{- end }}
+{{- if .Values.global.observability.prometheus.enabled }}
+{{- with .Values.global.observability.prometheus }}
+    - name: metrics
+      port: {{ .port }}
+      protocol: TCP
+{{- end }}
+{{- end }}
   selector:
     {{- include "application.scheduler.selectorLabels" . | nindent 4 }}
 {{- end }}
