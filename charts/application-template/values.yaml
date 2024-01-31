@@ -107,12 +107,12 @@ global:
         enabled: false
     # -- set up additional service port and setup
     prometheus:
-      enabled: true
+      enabled: false
       port: 9090
       path: /metrics
       # -- create Prometheus Operator ServiceMonitorCR
       serviceMonitor:
-        enabled: true
+        enabled: false
 
 ## Server
 server:
