@@ -14,5 +14,5 @@ spec:
       - {{ .Release.Namespace }}
   selector:
     matchLabels:
-{{ include "application.commonLabels" . | indent 6}}
+      {{- include "application.commonLabels" . | nindent 6}}
 {{- end }}
