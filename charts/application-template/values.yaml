@@ -113,7 +113,7 @@ global:
       path: /metrics
       # -- create Prometheus Operator ServiceMonitorCR
       serviceMonitor:
-        enabled: false
+        enabled: true
 
 ## Server
 server:
