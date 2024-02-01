@@ -107,13 +107,12 @@ global:
         enabled: false
     # -- set up additional service port and setup
     prometheus:
-      enabled: false
-      port: 9100
-      # targetPort: 9100
-      path: /metrics
-      # -- create Prometheus Operator ServiceMonitorCR
+      # -- create Prometheus Operator ServiceMonitor CR
       serviceMonitor:
-        enabled: true
+        enabled: false
+        # port name of Service. e.g. server.ports[].name
+        portName: metrics
+        path: /metrics
 
 ## Server
 server:
@@ -235,6 +234,9 @@ server:
     - name: http
       port: 80
       targetPort: 3000
+    # - name: metrics
+    #   port: 9100
+    #   targetPort: 3001
 
   ## Readiness and liveness probes for default backend
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
@@ -476,6 +478,9 @@ worker:
     - name: http
       port: 80
       targetPort: 3000
+    # - name: metrics
+    #   port: 9100
+    #   targetPort: 3001
 
   ## Readiness and liveness probes for default backend
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
@@ -720,6 +725,9 @@ scheduler:
     - name: http
       port: 80
       targetPort: 3000
+    # - name: metrics
+    #   port: 9100
+    #   targetPort: 3001
 
   ## Readiness and liveness probes for default backend
   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/

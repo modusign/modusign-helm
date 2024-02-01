@@ -1,4 +1,4 @@
-{{- if and .Values.global.observability.prometheus.enabled .Values.global.observability.prometheus.serviceMonitor.enabled }}
+{{- if .Values.global.observability.prometheus.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -7,8 +7,8 @@ metadata:
     {{- include "application.commonLabels" . | nindent 4 }}
 spec:
   endpoints:
-    - path: {{ .Values.global.observability.prometheus.path }}
-      port: metrics
+    - path: {{ .Values.global.observability.prometheus.serviceMonitor.path }}
+      port: {{ .Values.global.observability.prometheus.serviceMonitor.portName }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
