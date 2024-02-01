@@ -17,6 +17,9 @@ spec:
 {{- with .Values.global.observability.prometheus }}
     - name: metrics
       port: {{ .port }}
+      {{- if .targetPort }}
+      targetPort: {{ .targetPort }}
+      {{- end }}
       protocol: TCP
 {{- end }}
 {{- end }}

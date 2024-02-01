@@ -109,6 +109,7 @@ global:
     prometheus:
       enabled: false
       port: 9100
+      # targetPort: 9100
       path: /metrics
       # -- create Prometheus Operator ServiceMonitorCR
       serviceMonitor:
