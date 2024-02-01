@@ -105,9 +105,15 @@ global:
     datadog:
       admissionController:
         enabled: false
-    # -- inject grafana
-    # grafana:
-    #   enabled: false
+    # -- set up additional service port and setup
+    prometheus:
+      enabled: false
+      port: 9100
+      # targetPort: 9100
+      path: /metrics
+      # -- create Prometheus Operator ServiceMonitorCR
+      serviceMonitor:
+        enabled: true
 
 ## Server
 server:
