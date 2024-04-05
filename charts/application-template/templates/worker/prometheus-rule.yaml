@@ -1,4 +1,3 @@
-{{- if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1/PrometheusRule" }}
 {{- if and .Values.worker.enabled (or .Values.worker.observability.prometheus.alerting_rules.enabled .Values.worker.observability.prometheus.istio_alerting_rules.enabled) }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
@@ -77,5 +76,4 @@ spec:
             summary: "[{{ include "application.worker.name" . | title }}][istio-proxy] High memory usage"
             description: "[{{ include "application.worker.name" . | title }}][istio-proxy] 서비스의 최근 메모리 사용량이 {{ .Values.worker.observability.prometheus.istio_alerting_rules.highMemoryUsageThreshold }}% 이상이 되었습니다. 현재값: {{`{{ .Value | humanize }}`}}%"
     {{- end }}
-{{- end }}
 {{- end }}
