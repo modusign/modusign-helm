@@ -611,6 +611,20 @@ worker:
     # -- destinationRule configuration
     destinationRules: []
 
+  observability:
+    prometheus:
+      # -- create Prometheus Operator PrometheusRule CR for service container
+      alerting_rules:
+        enabled: false
+        highCpuUsageThreshold: 70
+        highMemoryUsageThreshold: 70
+      # -- create Prometheus Operator PrometheusRule CR for istio proxy container
+      istio_alerting_rules:
+        enabled: false
+        highCpuUsageThreshold: 70
+        highMemoryUsageThreshold: 70
+
+
 ## Scheduler
 scheduler:
   enabled: false
@@ -857,3 +871,17 @@ scheduler:
     virtualServices: []
     # -- destinationRule configuration
     destinationRules: []
+
+  observability:
+    prometheus:
+      # -- create Prometheus Operator PrometheusRule CR for service container
+      alerting_rules:
+        enabled: false
+        highCpuUsageThreshold: 70
+        highMemoryUsageThreshold: 70
+      # -- create Prometheus Operator PrometheusRule CR for istio proxy container
+      istio_alerting_rules:
+        enabled: false
+        highCpuUsageThreshold: 70
+        highMemoryUsageThreshold: 70
+

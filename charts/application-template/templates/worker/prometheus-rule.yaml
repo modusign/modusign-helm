@@ -1,0 +1,81 @@
+{{- if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1/PrometheusRule" }}
+{{- if and .Values.worker.enabled (or .Values.worker.observability.prometheus.alerting_rules.enabled .Values.worker.observability.prometheus.istio_alerting_rules.enabled) }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ template "application.worker.name" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  groups:
+    {{- if .Values.worker.observability.prometheus.alerting_rules.enabled }}
+    - name: ServiceContainerResourceUsage
+      alerting_rules:
+        - alert: "HighServiceContainerCPUUsage"
+          expr: |
+            avg(
+                rate(container_cpu_usage_seconds_total{ container={{ .Values.worker.name | quote }} }[2m]) * on(pod) group_left kube_pod_labels{ label_app_kubernetes_io_name={{ include "application.worker.name" . | quote }} }
+                / on(pod)
+                (kube_pod_container_resource_limits{ resource="cpu", container={{ .Values.worker.name | quote }} })
+            )
+            * 100
+            > {{ .Values.worker.observability.prometheus.alerting_rules.highCpuUsageThreshold }}
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "[{{ include "application.worker.name" . | title }}] High CPU usage"
+            description: "[{{ include "application.worker.name" . | title }}] 서비스의 최근 CPU 사용량이 {{ .Values.worker.observability.prometheus.alerting_rules.highCpuUsageThreshold }}% 이상이 되었습니다. 현재값: {{`{{ .Value | humanize }}`}}%"
+
+        - alert: HighServiceContainerMemoryUsage
+          expr: |
+            avg(
+                (container_memory_rss{ container={{ .Values.worker.name | quote }} } * on(pod) group_left kube_pod_labels{ label_app_kubernetes_io_name={{ include "application.worker.name" . | quote }} })
+                / on(pod)
+                (kube_pod_container_resource_limits{ resource="memory", container={{ .Values.worker.name | quote }} })
+            ) * 100
+            > {{ .Values.worker.observability.prometheus.alerting_rules.highMemoryUsageThreshold }}
+          for: 5m
+          labels:
+            service: {{ include "application.worker.name" . | quote }}
+            severity: critical
+          annotations:
+            summary: "[{{ include "application.worker.name" . | title }}] High memory usage"
+            description: "[{{ include "application.worker.name" . | title }}] 서비스의 최근 메모리 사용량이 {{ .Values.worker.observability.prometheus.alerting_rules.highMemoryUsageThreshold }}% 이상이 되었습니다. 현재값: {{`{{ .Value | humanize }}`}}%"
+    {{- end }}
+    {{- if .Values.worker.observability.prometheus.istio_alerting_rules.enabled }}
+    - name: IstioContainerResourceUsage
+      alerting_rules:
+        - alert: "HighIstioContainerCPUUsage"
+          expr: |
+            avg(
+                rate(container_cpu_usage_seconds_total{ container="istio-proxy" }[2m]) * on(pod) group_left kube_pod_labels{ label_app_kubernetes_io_name={{ include "application.worker.name" . | quote }} }
+                / on(pod)
+                (kube_pod_container_resource_limits{ resource="cpu", container="istio-proxy" })
+            )
+            * 100
+            > {{ .Values.worker.observability.prometheus.istio_alerting_rules.highCpuUsageThreshold }}
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "[{{ include "application.worker.name" . | title }}][istio-proxy] High CPU usage"
+            description: "[{{ include "application.worker.name" . | title }}][istio-proxy] 서비스의 최근 CPU 사용량이 {{ .Values.worker.observability.prometheus.istio_alerting_rules.highCpuUsageThreshold }}% 이상이 되었습니다. 현재값: {{`{{ .Value | humanize }}`}}%"
+
+        - alert: HighIstioContainerMemoryUsage
+          expr: |
+            avg(
+                (container_memory_rss{ container="istio-proxy" } * on(pod) group_left kube_pod_labels{ label_app_kubernetes_io_name={{ include "application.worker.name" . | quote }} })
+                / on(pod)
+                (kube_pod_container_resource_limits{ resource="memory", container="istio-proxy" })
+            ) * 100
+            > {{ .Values.worker.observability.prometheus.istio_alerting_rules.highMemoryUsageThreshold }}
+          for: 5m
+          labels:
+            service: {{ include "application.worker.name" . | quote }}
+            severity: critical
+          annotations:
+            summary: "[{{ include "application.worker.name" . | title }}][istio-proxy] High memory usage"
+            description: "[{{ include "application.worker.name" . | title }}][istio-proxy] 서비스의 최근 메모리 사용량이 {{ .Values.worker.observability.prometheus.istio_alerting_rules.highMemoryUsageThreshold }}% 이상이 되었습니다. 현재값: {{`{{ .Value | humanize }}`}}%"
+    {{- end }}
+{{- end }}
+{{- end }}
