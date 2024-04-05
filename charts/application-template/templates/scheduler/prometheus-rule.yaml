@@ -8,7 +8,7 @@ spec:
   groups:
     {{- if .Values.scheduler.observability.prometheus.alerting_rules.enabled }}
     - name: ServiceContainerResourceUsage
-      alerting_rules:
+      rules:
         - alert: "HighServiceContainerCPUUsage"
           expr: |
             avg(
@@ -43,7 +43,7 @@ spec:
     {{- end }}
     {{- if .Values.scheduler.observability.prometheus.istio_alerting_rules.enabled }}
     - name: IstioContainerResourceUsage
-      alerting_rules:
+      rules:
         - alert: "HighIstioContainerCPUUsage"
           expr: |
             avg(
