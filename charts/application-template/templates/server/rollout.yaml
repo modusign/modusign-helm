@@ -59,6 +59,10 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.server.terminationGracePeriodSeconds }}
       {{- end }}
       serviceAccountName: {{ include "server.serviceAccountName" . }}
+      {{- with .Values.global.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name: {{ .Values.server.name }}
         {{- with (.Values.server.image.repository | default .Values.global.image.repository) }}
@@ -133,6 +137,10 @@ spec:
           {{- toYaml .Values.server.resources | nindent 10 }}
         {{- with .Values.server.lifecycle }}
         lifecycle:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.server.containerSecurityContext }}
+        securityContext:
           {{- toYaml . | nindent 10 }}
         {{- end }}
       {{- with .Values.server.initContainers }}

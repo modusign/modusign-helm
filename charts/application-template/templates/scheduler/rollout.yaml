@@ -59,6 +59,10 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.scheduler.terminationGracePeriodSeconds }}
       {{- end }}
       serviceAccountName: {{ include "scheduler.serviceAccountName" . }}
+      {{- with .Values.global.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name: {{ .Values.scheduler.name }}
         {{- with (.Values.scheduler.image.repository | default .Values.global.image.repository) }}
@@ -133,6 +137,10 @@ spec:
           {{- toYaml .Values.scheduler.resources | nindent 10 }}
         {{- with .Values.scheduler.lifecycle }}
         lifecycle:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .Values.scheduler.containerSecurityContext }}
+        securityContext:
           {{- toYaml . | nindent 10 }}
         {{- end }}
       {{- with .Values.scheduler.initContainers }}

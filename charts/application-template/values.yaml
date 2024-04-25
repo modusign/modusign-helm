@@ -91,6 +91,9 @@ global:
     # -- Image pull Secrets for the Service Account
     imagePullSecrets: []
 
+  # -- Security context for all containers
+  securityContext: {}
+
   # -- Environment variables to pass to all deployed Deployments
   env: {}
 
@@ -211,6 +214,9 @@ server:
 
   # -- Specify postStart and preStop lifecycle hooks for your container
   lifecycle: {}
+
+  # -- Security context for container
+  containerSecurityContext: {}
 
   # -- Annotations to be added to server Deployment
   deploymentAnnotations: {}
@@ -468,6 +474,9 @@ worker:
 
   # -- Specify postStart and preStop lifecycle hooks for your container
   lifecycle: {}
+
+  # -- Security context for container
+  containerSecurityContext: {}
 
   # -- Annotations to be added to worker Deployment
   deploymentAnnotations: {}
@@ -729,6 +738,9 @@ scheduler:
 
   # -- Specify postStart and preStop lifecycle hooks for your container
   lifecycle: {}
+
+  # -- Security context for container
+  containerSecurityContext: {}
 
   # -- Annotations to be added to scheduler Deployment
   deploymentAnnotations: {}
