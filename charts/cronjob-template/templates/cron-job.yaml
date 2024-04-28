@@ -123,6 +123,10 @@ spec:
             lifecycle:
               {{- toYaml . | nindent 14 }}
             {{- end }}
+            {{- with .Values.securityContext }}
+            securityContext:
+              {{- toYaml . | nindent 14 }}
+            {{- end }}
           {{- with .Values.initContainers }}
           initContainers:
             {{- tpl (toYaml .) $ | nindent 10 }}

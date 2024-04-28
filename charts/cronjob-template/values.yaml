@@ -119,6 +119,9 @@ observability:
 # -- Specify postStart and preStop lifecycle hooks for your container
 lifecycle: {}
 
+# -- Security context for container
+securityContext: {}
+
 # -- Resource limits and requests for the server
 resources:
   requests:
