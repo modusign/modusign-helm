@@ -43,18 +43,29 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+Returns the appropriate DD_ENV value or a default value if none are defined.
+*/}}
+{{- define "application.env" -}}
+{{- with .Values.global.runtimeEnv -}}
+{{ . }}
+{{- else -}}
+stage
+{{- end }}
+{{- end }}
+
+{{/*
 Common labels
 */}}
 {{- define "application.commonLabels" -}}
 helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.modusign.co.kr/zone: {{ .Release.Namespace }}
-app.kubernetes.io/env: {{ .Values.global.runtimeEnv | default "stage" }}
-env: {{ .Values.global.runtimeEnv | default "stage" }}
+app.kubernetes.io/env: {{ include "application.env" . }}
+env: {{ include "application.env" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/part-of: {{ .Release.Name }}
 {{- if .Values.global.observability.datadog.admissionController.enabled }}
-tags.datadoghq.com/env: {{ coalesce .Values.global.env.DD_ENV .Values.global.runtimeEnv "stage" }}
+tags.datadoghq.com/env: {{ include "application.env" . }}
 tags.datadoghq.com/service: {{ .Release.Name }}
 tags.datadoghq.com/version: {{ .Values.global.image.tag | quote }}
 {{- end }}
