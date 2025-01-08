@@ -65,7 +65,7 @@ env: {{ include "application.env" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/part-of: {{ .Release.Name }}
 {{- if .Values.global.observability.datadog.admissionController.enabled }}
-tags.datadoghq.com/env: {{ include "application.env" . }}
+tags.datadoghq.com/env: {{ include "application.env" . }}-{{ .Release.Namespace }}
 tags.datadoghq.com/service: {{ .Release.Name }}
 tags.datadoghq.com/version: {{ .Values.global.image.tag | quote }}
 {{- end }}
