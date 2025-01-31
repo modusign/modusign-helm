@@ -145,7 +145,7 @@ server:
   ## server Horizontal Pod Autoscaler
   autoscaling:
     # -- Enable Horizontal Pod Autoscaler ([HPA]) for the server
-    enabled: true
+    enabled: false
     # -- Minimum number of replicas for the server [HPA]
     minReplicas: 1
     # -- Maximum number of replicas for the server [HPA]
@@ -174,6 +174,31 @@ server:
       apiVersion: argoproj.io/v1alpha1
       kind: Rollout
       name: application-template-server
+  ## KEDA resource for server
+  scaledObject:
+    # -- Enable KEDA resources for the server
+    enabled: false
+    # -- Minimum number of replicas for the server [KEDA]
+    minReplicaCount: 1
+    # -- Maximum number of replicas for the server [KEDA]
+    maxReplicaCount: 5
+    scaleTargetRef:
+      apiVersion: argoproj.io/v1alpha1
+      kind: Rollout
+      name: application-template-server
+    triggers: []
+      # - type: cron
+      #   metadata:
+      #     timezone: Asia/Seoul
+      #     start: 0 6 * * *
+      #     end: 25 15 * * *
+      #     desiredReplicas: "2"
+      # - type: cpu
+      #   metricType: Utilization
+      #   metadata:
+      #     value: "800"
+      #     containerName: "application-template-server"
+
   ## server Pod Disruption Budget
   pdb:
     # -- Deploy a [PodDisruptionBudget] for the server
@@ -403,7 +428,7 @@ worker:
   ## worker Horizontal Pod Autoscaler
   autoscaling:
     # -- Enable Horizontal Pod Autoscaler ([HPA]) for the worker
-    enabled: true
+    enabled: false
     # -- Minimum number of replicas for the worker [HPA]
     minReplicas: 1
     # -- Maximum number of replicas for the worker [HPA]
@@ -435,6 +460,30 @@ worker:
       apiVersion: apps/v1
       kind: Deployment
       name: application-template-worker
+  ## KEDA resource for worker
+  scaledObject:
+    # -- Enable KEDA resources for the worker
+    enabled: false
+    # -- Minimum number of replicas for the worker [KEDA]
+    minReplicaCount: 1
+    # -- Maximum number of replicas for the worker [KEDA]
+    maxReplicaCount: 4
+    scaleTargetRef:
+      apiVersion: argoproj.io/v1alpha1
+      kind: Rollout
+      name: application-template-worker
+    triggers: []
+      # - type: cron
+      #   metadata:
+      #     timezone: Asia/Seoul
+      #     start: 0 6 * * *
+      #     end: 0 20 * * *
+      #     desiredReplicas: "2"
+      # - type: cpu
+      #   metricType: Utilization
+      #   metadata:
+      #     value: "800"
+      #     containerName: "application-template-worker"
 
   ## worker Pod Disruption Budget
   pdb:
@@ -693,6 +742,31 @@ scheduler:
       # apiVersion: apps/v1
       # kind: Deployment
       # name: application-template-scheduler
+
+  ## KEDA resource for scheduler
+  scaledObject:
+    # -- Enable KEDA resources for the scheduler
+    enabled: false
+    # -- Minimum number of replicas for the scheduler [KEDA]
+    minReplicaCount: 1
+    # -- Maximum number of replicas for the scheduler [KEDA]
+    maxReplicaCount: 4
+    scaleTargetRef:
+      apiVersion: argoproj.io/v1alpha1
+      kind: Rollout
+      name: application-template-scheduler
+    triggers: []
+      # - type: cron
+      #   metadata:
+      #     timezone: Asia/Seoul
+      #     start: 0 6 * * *
+      #     end: 25 15 * * *
+      #     desiredReplicas: "2"
+      # - type: cpu
+      #   metricType: Utilization
+      #   metadata:
+      #     value: "800"
+      #     containerName: "application-template-scheduler"
 
   ## scheduler Pod Disruption Budget
   pdb:

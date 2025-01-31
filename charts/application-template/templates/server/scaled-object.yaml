@@ -1,0 +1,23 @@
+{{- if .Values.server.scaledObject.enabled | default false}}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ template "application.server.name" . }}-scaledobject
+  namespace: {{ .Release.Namespace }}
+spec:
+  {{- with .Values.server.scaledObject }}
+  {{- with .scaleTargetRef }}
+  scaleTargetRef:
+    apiVersion: {{ .apiVersion }}
+    kind: {{ .kind }}
+    name: {{ .name }}
+    {{- if .envSourceContainerName }}
+    envSourceContainerName: {{ .envSourceContainerName }}
+    {{- end }}
+  {{- end }}
+  minReplicaCount: {{ .minReplicaCount }}
+  maxReplicaCount: {{ .maxReplicaCount }}
+  triggers:
+    {{- toYaml .triggers | nindent 4 }}
+  {{- end }}
+{{- end}}
