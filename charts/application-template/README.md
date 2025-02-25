@@ -1,6 +1,6 @@
 # application-template
 
-![Version: 1.5.2](https://img.shields.io/badge/Version-1.5.2-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.7.1](https://img.shields.io/badge/Version-1.7.1-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for Modusign Applications
 
@@ -40,6 +40,7 @@ Kubernetes: `>=1.23`
 | global.revisionHistoryLimit | int | `3` | Number of old deployment ReplicaSets to retain. The rest will be garbage collected. |
 | global.rolloutAnalysis | object | `{}` | Rollout analysis to be added to the all Rollout |
 | global.runtimeEnv | string | `"stage"` | Runtime env for app.kubernetes.io/env, env, tags.datadoghq.com/env labels |
+| global.securityContext | object | `{}` | Security context for all containers |
 | global.serviceAccount.annotations | object | `{}` | Annotations applied to created service account |
 | global.serviceAccount.automountServiceAccountToken | bool | `false` | Automount API credentials for the Service Account |
 | global.serviceAccount.imagePullSecrets | list | `[]` | Image pull Secrets for the Service Account |
@@ -55,6 +56,7 @@ Kubernetes: `>=1.23`
 | scheduler.autoscaling.scaleTargetRef | object | `{}` |  |
 | scheduler.autoscaling.targetCPUUtilizationPercentage | int | `80` | If targetCPUUtilizationPercentage is set to 0, the autoscaler will not take CPU metrics into consideration while calculating the number of replicas. |
 | scheduler.autoscaling.targetMemoryUtilizationPercentage | int | `0` | If targetMemoryUtilizationPercentage is set to 0, the autoscaler will not take memory metrics into consideration while calculating the number of replicas. |
+| scheduler.containerSecurityContext | object | `{}` | Security context for container |
 | scheduler.deploymentAnnotations | object | `{}` | Annotations to be added to scheduler Deployment |
 | scheduler.deploymentStrategy | object | `{}` | Deployment strategy to be added to the scheduler Deployment |
 | scheduler.enabled | bool | `false` |  |
@@ -90,6 +92,13 @@ Kubernetes: `>=1.23`
 | scheduler.replicas | int | `1` | The number of scheduler pods to run |
 | scheduler.resources | object | `{}` | Resource limits and requests for the scheduler |
 | scheduler.rolloutAnalysis | object | `{}` | Rollout analysis to be added to the scheduler Rollout |
+| scheduler.scaledObject.enabled | bool | `false` | Enable KEDA resources for the scheduler |
+| scheduler.scaledObject.maxReplicaCount | int | `4` | Maximum number of replicas for the scheduler [KEDA] |
+| scheduler.scaledObject.minReplicaCount | int | `1` | Minimum number of replicas for the scheduler [KEDA] |
+| scheduler.scaledObject.scaleTargetRef.apiVersion | string | `"argoproj.io/v1alpha1"` |  |
+| scheduler.scaledObject.scaleTargetRef.kind | string | `"Rollout"` |  |
+| scheduler.scaledObject.scaleTargetRef.name | string | `"application-template-scheduler"` |  |
+| scheduler.scaledObject.triggers | list | `[]` |  |
 | scheduler.serviceAccount.annotations | object | `{}` | Annotations applied to created service account |
 | scheduler.serviceAccount.automountServiceAccountToken | bool | `false` | Automount API credentials for the Service Account |
 | scheduler.serviceAccount.create | bool | `true` | Create global service account |
@@ -104,7 +113,7 @@ Kubernetes: `>=1.23`
 | scheduler.workload | string | `"deployment"` | set deployment kind to Rollouts rollout:   enabled : false |
 | server.affinity | object | `{}` (defaults to global.affinity preset) | Assign custom [affinity] rules to the deployment |
 | server.autoscaling.behavior | object | `{}` | Configures the scaling behavior of the target in both Up and Down directions. |
-| server.autoscaling.enabled | bool | `true` | Enable Horizontal Pod Autoscaler ([HPA]) for the server |
+| server.autoscaling.enabled | bool | `false` | Enable Horizontal Pod Autoscaler ([HPA]) for the server |
 | server.autoscaling.maxReplicas | int | `5` | Maximum number of replicas for the server [HPA] |
 | server.autoscaling.minReplicas | int | `1` | Minimum number of replicas for the server [HPA] |
 | server.autoscaling.scaleTargetRef.apiVersion | string | `"argoproj.io/v1alpha1"` |  |
@@ -112,6 +121,7 @@ Kubernetes: `>=1.23`
 | server.autoscaling.scaleTargetRef.name | string | `"application-template-server"` |  |
 | server.autoscaling.targetCPUUtilizationPercentage | int | `80` | If targetCPUUtilizationPercentage is set to 0, the autoscaler will not take CPU metrics into consideration while calculating the number of replicas. |
 | server.autoscaling.targetMemoryUtilizationPercentage | int | `0` | If targetMemoryUtilizationPercentage is set to 0, the autoscaler will not take memory metrics into consideration while calculating the number of replicas. |
+| server.containerSecurityContext | object | `{}` | Security context for container |
 | server.deploymentAnnotations | object | `{}` | Annotations to be added to server Deployment |
 | server.deploymentStrategy | object | `{}` | Deployment strategy to be added to the server Deployment |
 | server.enabled | bool | `true` |  |
@@ -147,6 +157,13 @@ Kubernetes: `>=1.23`
 | server.replicas | int | `1` | The number of server pods to run |
 | server.resources | object | `{"limits":{"cpu":"800m","memory":"1600Mi"},"requests":{"cpu":"400m","memory":"800Mi"}}` | Resource limits and requests for the server |
 | server.rolloutAnalysis | object | `{"successfulRunHistoryLimit":1,"unsuccessfulRunHistoryLimit":3}` | Rollout analysis to be added to the server Rollout |
+| server.scaledObject.enabled | bool | `false` | Enable KEDA resources for the server |
+| server.scaledObject.maxReplicaCount | int | `5` | Maximum number of replicas for the server [KEDA] |
+| server.scaledObject.minReplicaCount | int | `1` | Minimum number of replicas for the server [KEDA] |
+| server.scaledObject.scaleTargetRef.apiVersion | string | `"argoproj.io/v1alpha1"` |  |
+| server.scaledObject.scaleTargetRef.kind | string | `"Rollout"` |  |
+| server.scaledObject.scaleTargetRef.name | string | `"application-template-server"` |  |
+| server.scaledObject.triggers | list | `[]` |  |
 | server.serviceAccount.annotations | object | `{}` | Annotations applied to created service account |
 | server.serviceAccount.automountServiceAccountToken | bool | `false` | Automount API credentials for the Service Account |
 | server.serviceAccount.create | bool | `true` | Create server service account |
@@ -161,12 +178,13 @@ Kubernetes: `>=1.23`
 | server.workload | string | `"rollout"` | set deployment kind to Rollouts rollout:   enabled : false |
 | worker.affinity | object | `{}` (defaults to global.affinity preset) | Assign custom [affinity] rules to the deployment |
 | worker.autoscaling.behavior | object | `{}` | Configures the scaling behavior of the target in both Up and Down directions. |
-| worker.autoscaling.enabled | bool | `true` | Enable Horizontal Pod Autoscaler ([HPA]) for the worker |
+| worker.autoscaling.enabled | bool | `false` | Enable Horizontal Pod Autoscaler ([HPA]) for the worker |
 | worker.autoscaling.maxReplicas | int | `5` | Maximum number of replicas for the worker [HPA] |
 | worker.autoscaling.minReplicas | int | `1` | Minimum number of replicas for the worker [HPA] |
 | worker.autoscaling.scaleTargetRef | object | `{"apiVersion":"apps/v1","kind":"Deployment","name":"application-template-worker"}` | scaleTargetRef.name is same value with worker.name |
 | worker.autoscaling.targetCPUUtilizationPercentage | int | `80` | If targetCPUUtilizationPercentage is set to 0, the autoscaler will not take CPU metrics into consideration while calculating the number of replicas. |
 | worker.autoscaling.targetMemoryUtilizationPercentage | int | `0` | If targetMemoryUtilizationPercentage is set to 0, the autoscaler will not take memory metrics into consideration while calculating the number of replicas. |
+| worker.containerSecurityContext | object | `{}` | Security context for container |
 | worker.deploymentAnnotations | object | `{}` | Annotations to be added to worker Deployment |
 | worker.deploymentStrategy | object | `{}` | Deployment strategy to be added to the worker Deployment |
 | worker.enabled | bool | `false` |  |
@@ -202,6 +220,13 @@ Kubernetes: `>=1.23`
 | worker.replicas | int | `1` | The number of worker pods to run |
 | worker.resources | object | `{}` | Resource limits and requests for the worker |
 | worker.rolloutAnalysis | object | `{}` | Rollout analysis to be added to the worker Rollout |
+| worker.scaledObject.enabled | bool | `false` | Enable KEDA resources for the worker |
+| worker.scaledObject.maxReplicaCount | int | `4` | Maximum number of replicas for the worker [KEDA] |
+| worker.scaledObject.minReplicaCount | int | `1` | Minimum number of replicas for the worker [KEDA] |
+| worker.scaledObject.scaleTargetRef.apiVersion | string | `"argoproj.io/v1alpha1"` |  |
+| worker.scaledObject.scaleTargetRef.kind | string | `"Rollout"` |  |
+| worker.scaledObject.scaleTargetRef.name | string | `"application-template-worker"` |  |
+| worker.scaledObject.triggers | list | `[]` |  |
 | worker.serviceAccount.annotations | object | `{}` | Annotations applied to created service account |
 | worker.serviceAccount.automountServiceAccountToken | bool | `false` | Automount API credentials for the Service Account |
 | worker.serviceAccount.create | bool | `true` | Create global service account |
@@ -215,3 +240,5 @@ Kubernetes: `>=1.23`
 | worker.volumes | list | `[]` | Additional volumes to the application worker pod |
 | worker.workload | string | `"deployment"` | set deployment kind to Rollouts rollout:   enabled : false |
 
+----------------------------------------------
+Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)

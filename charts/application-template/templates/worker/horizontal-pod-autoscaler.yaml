@@ -32,7 +32,7 @@ spec:
       {{- end }}
     {{- with .Values.worker.autoscaling.behavior }}
     behavior:
-      {{- toYaml . | nindent 4 }}
+      {{- toYaml . | nindent 6 }}
     {{- end }}
 {{- end }}
 {{- end }}
