@@ -32,7 +32,7 @@ spec:
       {{- end }}
     {{- with .Values.server.autoscaling.behavior }}
     behavior:
-      {{- toYaml . | nindent 4 }}
+      {{- toYaml . | nindent 6 }}
     {{- end }}
 {{- end }}
 {{- end }}
