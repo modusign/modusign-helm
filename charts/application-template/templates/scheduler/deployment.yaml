@@ -129,6 +129,17 @@ spec:
           successThreshold: {{ .successThreshold }}
           failureThreshold: {{ .failureThreshold }}
         {{- end }}
+        {{- with .Values.scheduler.startupProbe }}
+        startupProbe:
+          httpGet:
+            path: {{ .httpGet.path }}
+            port: {{ .httpGet.port }}
+          initialDelaySeconds: {{ .initialDelaySeconds }}
+          periodSeconds: {{ .periodSeconds }}
+          timeoutSeconds: {{ .timeoutSeconds }}
+          successThreshold: {{ .successThreshold }}
+          failureThreshold: {{ .failureThreshold }}
+        {{- end }}
         resources:
           {{- toYaml .Values.scheduler.resources | nindent 10 }}
         {{- with .Values.scheduler.lifecycle }}

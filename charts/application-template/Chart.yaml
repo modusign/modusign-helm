@@ -3,10 +3,10 @@ appVersion: v1.0.0
 description: A Helm chart for Modusign Applications
 home: https://app.modusign.co.kr
 keywords:
-- modusign
-kubeVersion: '>=1.23'
+  - modusign
+kubeVersion: ">=1.23"
 maintainers:
-- name: modusign
-  url: https://github.com/modusign
+  - name: modusign
+    url: https://github.com/modusign
 name: application-template
-version: 1.7.1
+version: 1.7.2
