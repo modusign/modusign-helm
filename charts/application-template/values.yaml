@@ -7,7 +7,7 @@ global:
   additionalLabels: {}
 
   # -- optional field that specifies the minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing
-  minReadySeconds : 60
+  minReadySeconds: 60
 
   # -- Number of old deployment ReplicaSets to retain. The rest will be garbage collected.
   revisionHistoryLimit: 3
@@ -60,20 +60,23 @@ global:
   # -- Default [TopologySpreadConstraints] rules for all components
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## If labelSelector is left out, it will default to the labelSelector of the component
-  topologySpreadConstraints: []
+  topologySpreadConstraints:
+    []
     # - maxSkew: 1
     #   topologyKey: topology.kubernetes.io/zone
     #   whenUnsatisfiable: DoNotSchedule
 
   # -- Deployment strategy to be added to the all Deployment
-  deploymentStrategy: {}
+  deploymentStrategy:
+    {}
     # type: RollingUpdate
     # rollingUpdate:
     #   maxSurge: 25%
     #   maxUnavailable: 25%
 
   # -- Rollout analysis to be added to the all Rollout
-  rolloutAnalysis: {}
+  rolloutAnalysis:
+    {}
     # successfulRunHistoryLimit: 1
     # unsuccessfulRunHistoryLimit: 3
 
@@ -157,7 +160,8 @@ server:
     # -- If targetMemoryUtilizationPercentage is set to 0, the autoscaler will not take memory metrics into consideration while calculating the number of replicas.
     targetMemoryUtilizationPercentage: 0
     # -- Configures the scaling behavior of the target in both Up and Down directions.
-    behavior: {}
+    behavior:
+      {}
       # scaleDown:
       #  stabilizationWindowSeconds: 300
       #  policies:
@@ -186,7 +190,8 @@ server:
       apiVersion: argoproj.io/v1alpha1
       kind: Rollout
       name: application-template-server
-    triggers: []
+    triggers:
+      []
       # - type: cron
       #   metadata:
       #     timezone: Asia/Seoul
@@ -221,13 +226,15 @@ server:
   extraCommands: []
 
   # -- Additional configMaps to pass to server
-  extraConfigMaps: []
+  extraConfigMaps:
+    []
     # - name: application-template-server
     #   data:
     #     test: values
 
   # -- extra envs to pass to server
-  extraEnvs: []
+  extraEnvs:
+    []
     # - name: VAULT_ADDR
     #   value: http://vault:8200
 
@@ -270,7 +277,7 @@ server:
     #   targetPort: 3001
 
   ## Readiness and liveness probes for default backend
-  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
   # readinessProbe:
   #   httpGet:
   #     path: /health
@@ -291,7 +298,22 @@ server:
   #     path: /health
   #     port: 3000
   #   # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
-  #   failureThreshold: 3
+  #   failureThreshold: 6
+  #   # -- Number of seconds after the container has started before [probe] is initiated
+  #   initialDelaySeconds: 10
+  #   # -- How often (in seconds) to perform the [probe]
+  #   periodSeconds: 10
+  #   # -- Minimum consecutive successes for the [probe] to be considered successful after having failed
+  #   successThreshold: 1
+  #   # -- Number of seconds after which the [probe] times out
+  #   timeoutSeconds: 1
+
+  # startupProbe:
+  #   httpGet:
+  #     path: /health
+  #     port: 3000
+  #   # -- Minimum consecutive failures for the [probe] to be considered failed after having succeeded
+  #   failureThreshold: 30
   #   # -- Number of seconds after the container has started before [probe] is initiated
   #   initialDelaySeconds: 10
   #   # -- How often (in seconds) to perform the [probe]
@@ -343,13 +365,15 @@ server:
   # @default -- `[]` (defaults to global.topologySpreadConstraints)
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## If labelSelector is left out, it will default to the labelSelector configuration of the deployment
-  topologySpreadConstraints: []
+  topologySpreadConstraints:
+    []
     # - maxSkew: 1
     #   topologyKey: topology.kubernetes.io/zone
     #   whenUnsatisfiable: DoNotSchedule
 
   # -- Deployment strategy to be added to the server Deployment
-  deploymentStrategy: {}
+  deploymentStrategy:
+    {}
     # type: RollingUpdate
     # rollingUpdate:
     #   maxSurge: 25%
@@ -440,7 +464,8 @@ worker:
     # -- If targetMemoryUtilizationPercentage is set to 0, the autoscaler will not take memory metrics into consideration while calculating the number of replicas.
     targetMemoryUtilizationPercentage: 0
     # -- Configures the scaling behavior of the target in both Up and Down directions.
-    behavior: {}
+    behavior:
+      {}
       # scaleDown:
       #  stabilizationWindowSeconds: 300
       #  policies:
@@ -472,7 +497,8 @@ worker:
       apiVersion: argoproj.io/v1alpha1
       kind: Rollout
       name: application-template-worker
-    triggers: []
+    triggers:
+      []
       # - type: cron
       #   metadata:
       #     timezone: Asia/Seoul
@@ -507,7 +533,8 @@ worker:
   extraCommands: []
 
   # -- Additional configMaps to pass to worker
-  extraConfigMaps: []
+  extraConfigMaps:
+    []
     # - name: application-template-server
     #   data:
     #     test: values
@@ -594,9 +621,10 @@ worker:
 
   # -- [Tolerations] for use with node taints
   # @default -- `[]` (defaults to global.tolerations)
-  tolerations: []
+  tolerations:
+    []
 
-   # -- Init containers to add to the application worker pod
+    # -- Init containers to add to the application worker pod
   initContainers: []
   #  - name: download-tools
   #    image: alpine:3
@@ -627,20 +655,23 @@ worker:
   # @default -- `[]` (defaults to global.topologySpreadConstraints)
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## If labelSelector is left out, it will default to the labelSelector configuration of the deployment
-  topologySpreadConstraints: []
+  topologySpreadConstraints:
+    []
     # - maxSkew: 1
     #   topologyKey: topology.kubernetes.io/zone
     #   whenUnsatisfiable: DoNotSchedule
 
   # -- Deployment strategy to be added to the worker Deployment
-  deploymentStrategy: {}
+  deploymentStrategy:
+    {}
     # type: RollingUpdate
     # rollingUpdate:
     #   maxSurge: 25%
     #   maxUnavailable: 25%
 
   # -- Rollout analysis to be added to the worker Rollout
-  rolloutAnalysis: {}
+  rolloutAnalysis:
+    {}
     # successfulRunHistoryLimit: 1
     # unsuccessfulRunHistoryLimit: 3
 
@@ -681,7 +712,6 @@ worker:
         enabled: false
         highCpuUsageThreshold: 70
         highMemoryUsageThreshold: 70
-
 
 ## Scheduler
 scheduler:
@@ -725,7 +755,8 @@ scheduler:
     # -- If targetMemoryUtilizationPercentage is set to 0, the autoscaler will not take memory metrics into consideration while calculating the number of replicas.
     targetMemoryUtilizationPercentage: 0
     # -- Configures the scaling behavior of the target in both Up and Down directions.
-    behavior: {}
+    behavior:
+      {}
       # scaleDown:
       #  stabilizationWindowSeconds: 300
       #  policies:
@@ -738,7 +769,8 @@ scheduler:
       #   - type: Pods
       #     value: 2
       #     periodSeconds: 60
-    scaleTargetRef: {}
+    scaleTargetRef:
+      {}
       # apiVersion: apps/v1
       # kind: Deployment
       # name: application-template-scheduler
@@ -755,7 +787,8 @@ scheduler:
       apiVersion: argoproj.io/v1alpha1
       kind: Rollout
       name: application-template-scheduler
-    triggers: []
+    triggers:
+      []
       # - type: cron
       #   metadata:
       #     timezone: Asia/Seoul
@@ -790,7 +823,8 @@ scheduler:
   extraCommands: []
 
   # -- Additional configMaps to pass to scheduler
-  extraConfigMaps: []
+  extraConfigMaps:
+    []
     # - name: application-template-server
     #   data:
     #     test: values
@@ -801,11 +835,11 @@ scheduler:
   # -- extra secrets to pass to scheduler
   extraSecrets: []
   # - name: application-template-server
-    #   annotations: {}
-    #   labels: {}
-    #   type: Opaque
-    #   secrets :
-    #     test: values
+  #   annotations: {}
+  #   labels: {}
+  #   type: Opaque
+  #   secrets :
+  #     test: values
 
   # -- envfrom in scheduler deployment
   envFrom: []
@@ -916,20 +950,23 @@ scheduler:
   # @default -- `[]` (defaults to global.topologySpreadConstraints)
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
   ## If labelSelector is left out, it will default to the labelSelector configuration of the deployment
-  topologySpreadConstraints: []
+  topologySpreadConstraints:
+    []
     # - maxSkew: 1
     #   topologyKey: topology.kubernetes.io/zone
     #   whenUnsatisfiable: DoNotSchedule
 
   # -- Deployment strategy to be added to the scheduler Deployment
-  deploymentStrategy: {}
+  deploymentStrategy:
+    {}
     # type: RollingUpdate
     # rollingUpdate:
     #   maxSurge: 25%
     #   maxUnavailable: 25%
 
   # -- Rollout analysis to be added to the scheduler Rollout
-  rolloutAnalysis: {}
+  rolloutAnalysis:
+    {}
     # successfulRunHistoryLimit: 1
     # unsuccessfulRunHistoryLimit: 3
 
@@ -970,4 +1007,3 @@ scheduler:
         enabled: false
         highCpuUsageThreshold: 70
         highMemoryUsageThreshold: 70
-
