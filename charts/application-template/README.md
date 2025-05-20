@@ -49,7 +49,7 @@ Kubernetes: `>=1.23`
 | global.topologySpreadConstraints | list | `[]` | Default [TopologySpreadConstraints] rules for all components # Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/ # If labelSelector is left out, it will default to the labelSelector of the component |
 | global.vault | object | `{"enabled":false,"path":"stage-default/application/${service}","secrets":{}}` | Secrets variables to pass to all deployed Deployments by argocd vault plugin |
 | hook.enabled | bool | `false` |  |
-| hook.jobs | list | `[]` |  |
+| hook.jobs | list | `[]` | jobs(Optional) - List of jobs to be created |
 | scheduler.affinity | object | `{}` (defaults to global.affinity preset) | Assign custom [affinity] rules to the deployment |
 | scheduler.autoscaling.behavior | object | `{}` | Configures the scaling behavior of the target in both Up and Down directions. |
 | scheduler.autoscaling.enabled | bool | `false` | Enable Horizontal Pod Autoscaler ([HPA]) for the scheduler |

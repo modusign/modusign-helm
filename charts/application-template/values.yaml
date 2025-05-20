@@ -123,13 +123,16 @@ global:
 ## Hooks
 hook:
   enabled: false
+  # -- jobs(Optional) - List of jobs to be created
   jobs:
     []
     # - name: pre-install-job
     #   # -- hook type(Required)
     #   # pre-install, post-install, pre-upgrade, post-upgrade, pre-delete, post-delete
     #   hook: pre-install
+    #   # -- hookWeight(Optional) - Weight of the hook
     #   hookWeight: "5"
+    #   # -- hookDeletePolicy(Optional) - List of hook delete policies
     #   hookDeletePolicy:
     #     - before-hook-creation
     #     - hook-succeeded
