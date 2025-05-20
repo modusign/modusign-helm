@@ -126,7 +126,7 @@ Kubernetes: `>=1.23`
 | server.containerSecurityContext | object | `{}` | Security context for container |
 | server.deploymentAnnotations | object | `{}` | Annotations to be added to server Deployment |
 | server.deploymentStrategy | object | `{}` | Deployment strategy to be added to the server Deployment |
-| server.enabled | bool | `false` |  |
+| server.enabled | bool | `true` |  |
 | server.envFrom | list | `[]` | envfrom in server deployment |
 | server.extraArgs | list | `[]` | Additional command line arguments to pass to server |
 | server.extraCommands | list | `[]` | Additional command line arguments to pass to server |

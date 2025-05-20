@@ -164,7 +164,7 @@ hook:
 
 ## Server
 server:
-  enabled: false
+  enabled: true
   # -- server name
   # name: application-template
 
