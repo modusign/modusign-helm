@@ -1,6 +1,6 @@
 # application-template
 
-![Version: 1.7.2](https://img.shields.io/badge/Version-1.7.2-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.8.0](https://img.shields.io/badge/Version-1.8.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for Modusign Applications
 
@@ -48,6 +48,8 @@ Kubernetes: `>=1.23`
 | global.tolerations | list | `[]` | Default tolerations for all components |
 | global.topologySpreadConstraints | list | `[]` | Default [TopologySpreadConstraints] rules for all components # Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/ # If labelSelector is left out, it will default to the labelSelector of the component |
 | global.vault | object | `{"enabled":false,"path":"stage-default/application/${service}","secrets":{}}` | Secrets variables to pass to all deployed Deployments by argocd vault plugin |
+| hook.enabled | bool | `false` |  |
+| hook.jobs | list | `[]` |  |
 | scheduler.affinity | object | `{}` (defaults to global.affinity preset) | Assign custom [affinity] rules to the deployment |
 | scheduler.autoscaling.behavior | object | `{}` | Configures the scaling behavior of the target in both Up and Down directions. |
 | scheduler.autoscaling.enabled | bool | `false` | Enable Horizontal Pod Autoscaler ([HPA]) for the scheduler |
@@ -124,7 +126,7 @@ Kubernetes: `>=1.23`
 | server.containerSecurityContext | object | `{}` | Security context for container |
 | server.deploymentAnnotations | object | `{}` | Annotations to be added to server Deployment |
 | server.deploymentStrategy | object | `{}` | Deployment strategy to be added to the server Deployment |
-| server.enabled | bool | `true` |  |
+| server.enabled | bool | `false` |  |
 | server.envFrom | list | `[]` | envfrom in server deployment |
 | server.extraArgs | list | `[]` | Additional command line arguments to pass to server |
 | server.extraCommands | list | `[]` | Additional command line arguments to pass to server |

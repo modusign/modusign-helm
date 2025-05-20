@@ -120,9 +120,50 @@ global:
         portName: metrics
         path: /metrics
 
+hook:
+  enabled: false
+  jobs:
+    []
+    # - name: pre-install-job
+    #   # -- hook type(Required)
+    #   # pre-install, post-install, pre-upgrade, post-upgrade, pre-delete, post-delete
+    #   hook: pre-install
+    #   hookWeight: "5"
+    #   hookDeletePolicy:
+    #     - before-hook-creation
+    #     - hook-succeeded
+    #   image:
+    #     repository: busybox
+    #     tag: latest
+    #   command: ["sh", "-c"]
+    #   args: ["echo 'Running pre-install job'"]
+    #   # -- serviceAccount(Optional)
+    #   # When enabled, a service account will be created with the name of the job
+    #   # If the name is not specified or create is false, it will be set to the name of the job
+    #   serviceAccount:
+    #     create: true
+    #     name: application-template-pre-install-job
+    #   envFrom: []
+    #   # -- envs(Optional)
+    #   env: []
+    #   # -- secrets(Optional)
+    #   # If the name is not specified or create is false, it will be set to the name of the job
+    #   # -- Secrets variables to pass to all deployed job by argocd vault plugin
+    #   vault:
+    #     enabled: true
+    #     path: stage-default/application/job/${service}
+    #     secrets:
+    #       test: test
+    # - name: post-install-job
+    #   hook: post-install
+    #   command: ["sh", "-c"]
+    #   args: ["echo 'Running post-install job'"]
+    #   serviceAccount:
+    #     create: true
+
 ## Server
 server:
-  enabled: true
+  enabled: false
   # -- server name
   # name: application-template
 

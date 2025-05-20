@@ -1,0 +1,127 @@
+{{- if .Values.hook.enabled }}
+{{- range $jobIndex, $job := .Values.hook.jobs }}
+{{- with $job }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ printf "%s-%s" $.Release.Name .name | trunc 63 | trimSuffix "-" }}
+  namespace: {{ $.Release.Namespace }}
+  annotations:
+    "helm.sh/hook": {{ .hook | default "pre-install" | quote }}
+    {{- if .hookWeight }}
+    "helm.sh/hook-weight": {{ .hookWeight | quote }}
+    {{- end }}
+    {{- if .hookDeletePolicy }}
+    "helm.sh/hook-delete-policy": {{ .hookDeletePolicy | join "," | quote }}
+    {{- else }}
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+    {{- end }}
+  labels:
+    {{- include "application.commonLabels" $ | nindent 4 }}
+    {{- with .labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  ttlSecondsAfterFinished: {{ .ttlSecondsAfterFinished | default 300 }}
+  backoffLimit: {{ .backoffLimit | default 6 }}
+  {{- with .activeDeadlineSeconds }}
+  activeDeadlineSeconds: {{ . }}
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        {{- include "application.commonLabels" $ | nindent 8 }}
+        {{- with .podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- with .podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with $.Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .serviceAccount }}
+      {{- if .name }}
+      serviceAccountName: {{ .name }}
+      {{- else }}
+      serviceAccountName: {{ printf "%s-%s" $.Release.Name $job.name | trunc 63 | trimSuffix "-" }}
+      {{- end }}
+      {{- end }}
+      restartPolicy: {{ .restartPolicy | default "Never" }}
+      {{- with .securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - name: {{ .name }}
+        {{- if .image }}
+        {{- if contains "/" .image.repository }}
+        image: "{{ .image.repository }}:{{ .image.tag }}"
+        {{- else }}
+        image: "{{ .image.hub | default $.Values.global.image.hub }}/{{ .image.repository }}:{{ .image.tag }}"
+        {{- end }}
+        imagePullPolicy: {{ .image.imagePullPolicy | default $.Values.global.image.imagePullPolicy }}
+        {{- else }}
+        {{- if contains "/" $.Values.global.image.repository }}
+        image: "{{ $.Values.global.image.repository }}:{{ $.Values.global.image.tag }}"
+        {{- else }}
+        image: "{{ $.Values.global.image.hub }}/{{ $.Values.global.image.repository }}:{{ $.Values.global.image.tag }}"
+        {{- end }}
+        imagePullPolicy: {{ $.Values.global.image.imagePullPolicy }}
+        {{- end }}
+        {{- with .command }}
+        command:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .args }}
+        args:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .env }}
+        env:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        envFrom:
+          {{- if .vault }}
+          - secretRef:
+              name: {{ .vault.name | default (printf "%s-%s" $.Release.Name $job.name | trunc 63 | trimSuffix "-") }}
+          {{- end }}
+        {{- with .volumeMounts }}
+        volumeMounts:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .resources }}
+        resources:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with .securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
+      {{- with .initContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
