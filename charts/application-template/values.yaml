@@ -120,6 +120,7 @@ global:
         portName: metrics
         path: /metrics
 
+## Hooks
 hook:
   enabled: false
   jobs:
