@@ -3,6 +3,22 @@ entries:
   application-template:
   - apiVersion: v2
     appVersion: v1.0.0
+    created: "2025-05-27T07:36:34.617976827Z"
+    description: A Helm chart for Modusign Applications
+    digest: 451f756a73e05f1e9cfd2fa02ac20a9544b2d2093991558a88ad589500b1a74f
+    home: https://app.modusign.co.kr
+    keywords:
+    - modusign
+    kubeVersion: '>=1.23'
+    maintainers:
+    - name: modusign
+      url: https://github.com/modusign
+    name: application-template
+    urls:
+    - https://github.com/modusign/modusign-helm/releases/download/application-template-1.8.1/application-template-1.8.1.tgz
+    version: 1.8.1
+  - apiVersion: v2
+    appVersion: v1.0.0
     created: "2025-05-27T06:13:07.456743257Z"
     description: A Helm chart for Modusign Applications
     digest: 1253f0aff00b04d361b492ff62b8956fb20bedd6017d34994516cd0da7da88e0
@@ -402,4 +418,4 @@ entries:
     urls:
     - https://github.com/modusign/modusign-helm/releases/download/cronjob-template-1.0.0/cronjob-template-1.0.0.tgz
     version: 1.0.0
-generated: "2025-05-27T06:13:07.456895772Z"
+generated: "2025-05-27T07:36:34.618131818Z"
