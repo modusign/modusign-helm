@@ -59,6 +59,10 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.server.hostAliases | default .Values.global.hostAliases }}
+      hostAliases:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name: {{ .Values.server.name }}
         {{- with (.Values.server.image.repository | default .Values.global.image.repository) }}
