@@ -1,6 +1,6 @@
 # application-template
 
-![Version: 1.8.0](https://img.shields.io/badge/Version-1.8.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.8.2](https://img.shields.io/badge/Version-1.8.2-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for Modusign Applications
 
@@ -25,6 +25,7 @@ Kubernetes: `>=1.23`
 | global.deploymentAnnotations | object | `{}` | Annotations for the all deployed Deployments |
 | global.deploymentStrategy | object | `{}` | Deployment strategy to be added to the all Deployment |
 | global.env | object | `{}` | Environment variables to pass to all deployed Deployments |
+| global.hostAliases | list | `[]` | hostAliases for all containers |
 | global.image.hub | string | `"harbor.modusign.co.kr/modusign"` | hub applied to all deployments |
 | global.image.imagePullPolicy | string | `"IfNotPresent"` | imagePullPolicy applied to all deployments |
 | global.image.repository | string | `"application-template"` | repository applied to all deployments |
@@ -68,6 +69,7 @@ Kubernetes: `>=1.23`
 | scheduler.extraConfigMaps | list | `[]` | Additional configMaps to pass to scheduler |
 | scheduler.extraEnvs | list | `[]` | extra envs to pass to shceduler |
 | scheduler.extraSecrets | list | `[]` | extra secrets to pass to scheduler |
+| scheduler.hostAliases | list | `[]` | hostAliases for scheduler containers |
 | scheduler.image.hub | string | `""` | hub applied to scheduler deployments |
 | scheduler.image.imagePullPolicy | string | `""` | imagePullPolicy applied to scheduler deployments |
 | scheduler.image.repository | string | `""` | repository applied to scheduler deployments |
@@ -133,6 +135,7 @@ Kubernetes: `>=1.23`
 | server.extraConfigMaps | list | `[]` | Additional configMaps to pass to server |
 | server.extraEnvs | list | `[]` | extra envs to pass to server |
 | server.extraSecrets | list | `[]` | extra secrets to pass to server |
+| server.hostAliases | list | `[]` | hostAliases for server containers |
 | server.image.hub | string | `""` | hub applied to server deployments |
 | server.image.imagePullPolicy | string | `""` | imagePullPolicy applied to server deployments |
 | server.image.repository | string | `""` | repository applied to server deployments |
@@ -196,6 +199,7 @@ Kubernetes: `>=1.23`
 | worker.extraConfigMaps | list | `[]` | Additional configMaps to pass to worker |
 | worker.extraEnvs | list | `[]` | extra envs to pass to worker |
 | worker.extraSecrets | list | `[]` | extra secrets to pass to worker |
+| worker.hostAliases | list | `[]` | hostAliases for worker containers |
 | worker.image.hub | string | `""` | hub applied to worker deployments |
 | worker.image.imagePullPolicy | string | `""` | imagePullPolicy applied to worker deployments |
 | worker.image.repository | string | `""` | repository applied to worker deployments |

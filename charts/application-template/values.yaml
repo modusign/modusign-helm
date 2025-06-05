@@ -94,6 +94,14 @@ global:
     # -- Image pull Secrets for the Service Account
     imagePullSecrets: []
 
+  # -- hostAliases for all containers
+  hostAliases:
+    []
+    # - ip: "127.0.0.1"
+    #   hostnames:
+    #     - "example.com"
+    #     - "www.example.com"
+
   # -- Security context for all containers
   securityContext: {}
 
@@ -291,6 +299,14 @@ server:
 
   # -- Specify postStart and preStop lifecycle hooks for your container
   lifecycle: {}
+
+  # -- hostAliases for server containers
+  hostAliases:
+    []
+    # - ip: "127.0.0.1"
+    #   hostnames:
+    #     - "example.com"
+    #     - "www.example.com"
 
   # -- Security context for container
   containerSecurityContext: {}
@@ -596,6 +612,14 @@ worker:
   # -- Specify postStart and preStop lifecycle hooks for your container
   lifecycle: {}
 
+  # -- hostAliases for worker containers
+  hostAliases:
+    []
+    # - ip: "127.0.0.1"
+    #   hostnames:
+    #     - "example.com"
+    #     - "www.example.com"
+
   # -- Security context for container
   containerSecurityContext: {}
 
@@ -891,6 +915,14 @@ scheduler:
 
   # -- Specify postStart and preStop lifecycle hooks for your container
   lifecycle: {}
+
+  # -- hostAliases for scheduler containers
+  hostAliases:
+    []
+    # - ip: "127.0.0.1"
+    #   hostnames:
+    #     - "example.com"
+    #     - "www.example.com"
 
   # -- Security context for container
   containerSecurityContext: {}
