@@ -85,11 +85,11 @@ spec:
         env:
           {{- toYaml . | nindent 10 }}
         {{- end }}
+        {{- if .vault.enabled | default false }}
         envFrom:
-          {{- if .vault }}
           - secretRef:
               name: {{ .vault.name | default (printf "%s-%s" $.Release.Name $job.name | trunc 63 | trimSuffix "-") }}
-          {{- end }}
+        {{- end }}
         {{- with .volumeMounts }}
         volumeMounts:
           {{- toYaml . | nindent 10 }}
