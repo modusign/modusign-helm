@@ -498,4 +498,22 @@ entries:
     urls:
     - https://github.com/modusign/modusign-helm/releases/download/cronjob-template-1.0.0/cronjob-template-1.0.0.tgz
     version: 1.0.0
-generated: "2025-07-01T07:50:23.67670881Z"
+  custom-resource-template:
+  - apiVersion: v2
+    appVersion: v1.0.0
+    created: "2025-07-07T08:51:26.109094234Z"
+    description: A Helm chart for custom resources
+    digest: f2b330a5e9223b8c5e88d58846fbdf8c8195cfac80525c97c1e25755b2d6bbb6
+    home: https://app.modusign.co.kr
+    keywords:
+    - modusign
+    - custom-resource
+    kubeVersion: '>=1.23'
+    maintainers:
+    - name: modusign
+      url: https://github.com/modusign
+    name: custom-resource-template
+    urls:
+    - https://github.com/modusign/modusign-helm/releases/download/custom-resource-template-1.0.0/custom-resource-template-1.0.0.tgz
+    version: 1.0.0
+generated: "2025-07-07T08:51:26.109159827Z"
