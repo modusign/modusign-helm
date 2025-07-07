@@ -1,0 +1,13 @@
+apiVersion: v2
+appVersion: v1.0.0
+description: A Helm chart for custom resources
+home: https://app.modusign.co.kr
+keywords:
+  - modusign
+  - custom-resource
+kubeVersion: ">=1.23"
+maintainers:
+  - name: modusign
+    url: https://github.com/modusign
+name: custom-resource-template
+version: 1.0.0
