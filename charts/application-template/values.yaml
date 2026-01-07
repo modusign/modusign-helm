@@ -212,6 +212,10 @@ server:
     # -- Average memory utilization percentage for the server [HPA]
     # -- If targetMemoryUtilizationPercentage is set to 0, the autoscaler will not take memory metrics into consideration while calculating the number of replicas.
     targetMemoryUtilizationPercentage: 0
+    # -- External metrics for the server [HPA]
+    externalMetrics: []
+      # - name: datadogmetric@namespace:metricname
+      #   value: "800"
     # -- Configures the scaling behavior of the target in both Up and Down directions.
     behavior:
       {}
@@ -524,6 +528,10 @@ worker:
     # -- Average memory utilization percentage for the worker [HPA]
     # -- If targetMemoryUtilizationPercentage is set to 0, the autoscaler will not take memory metrics into consideration while calculating the number of replicas.
     targetMemoryUtilizationPercentage: 0
+    # -- External metrics for the worker [HPA]
+    externalMetrics: []
+      # - name: datadogmetric@namespace:metricname
+      #   value: "800"
     # -- Configures the scaling behavior of the target in both Up and Down directions.
     behavior:
       {}
@@ -823,6 +831,10 @@ scheduler:
     # -- Average memory utilization percentage for the scheduler [HPA]
     # -- If targetMemoryUtilizationPercentage is set to 0, the autoscaler will not take memory metrics into consideration while calculating the number of replicas.
     targetMemoryUtilizationPercentage: 0
+    # -- External metrics for the scheduler [HPA]
+    externalMetrics: []
+      # - name: datadogmetric@namespace:metricname
+      #   value: "800"
     # -- Configures the scaling behavior of the target in both Up and Down directions.
     behavior:
       {}

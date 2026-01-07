@@ -30,6 +30,15 @@ spec:
             type: Utilization
             averageUtilization: {{ . }}
       {{- end }}
+      {{- range .Values.server.autoscaling.externalMetrics }}
+      - type: External
+        external:
+          metric:
+            name: {{ .name }}
+          target:
+            type: Value
+            value: {{ .value }}
+      {{- end }}
     {{- with .Values.server.autoscaling.behavior }}
     behavior:
       {{- toYaml . | nindent 6 }}
