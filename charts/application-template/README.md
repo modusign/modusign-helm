@@ -1,6 +1,6 @@
 # application-template
 
-![Version: 1.8.6](https://img.shields.io/badge/Version-1.8.6-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.8.8](https://img.shields.io/badge/Version-1.8.8-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for Modusign Applications
 
@@ -54,6 +54,7 @@ Kubernetes: `>=1.23`
 | scheduler.affinity | object | `{}` (defaults to global.affinity preset) | Assign custom [affinity] rules to the deployment |
 | scheduler.autoscaling.behavior | object | `{}` | Configures the scaling behavior of the target in both Up and Down directions. |
 | scheduler.autoscaling.enabled | bool | `false` | Enable Horizontal Pod Autoscaler ([HPA]) for the scheduler |
+| scheduler.autoscaling.externalMetrics | list | `[]` | External metrics for the scheduler [HPA] |
 | scheduler.autoscaling.maxReplicas | int | `5` | Maximum number of replicas for the scheduler [HPA] |
 | scheduler.autoscaling.minReplicas | int | `1` | Minimum number of replicas for the scheduler [HPA] |
 | scheduler.autoscaling.scaleTargetRef | object | `{}` |  |
@@ -118,6 +119,7 @@ Kubernetes: `>=1.23`
 | server.affinity | object | `{}` (defaults to global.affinity preset) | Assign custom [affinity] rules to the deployment |
 | server.autoscaling.behavior | object | `{}` | Configures the scaling behavior of the target in both Up and Down directions. |
 | server.autoscaling.enabled | bool | `false` | Enable Horizontal Pod Autoscaler ([HPA]) for the server |
+| server.autoscaling.externalMetrics | list | `[]` | External metrics for the server [HPA] |
 | server.autoscaling.maxReplicas | int | `5` | Maximum number of replicas for the server [HPA] |
 | server.autoscaling.minReplicas | int | `1` | Minimum number of replicas for the server [HPA] |
 | server.autoscaling.scaleTargetRef.apiVersion | string | `"argoproj.io/v1alpha1"` |  |
@@ -184,6 +186,7 @@ Kubernetes: `>=1.23`
 | worker.affinity | object | `{}` (defaults to global.affinity preset) | Assign custom [affinity] rules to the deployment |
 | worker.autoscaling.behavior | object | `{}` | Configures the scaling behavior of the target in both Up and Down directions. |
 | worker.autoscaling.enabled | bool | `false` | Enable Horizontal Pod Autoscaler ([HPA]) for the worker |
+| worker.autoscaling.externalMetrics | list | `[]` | External metrics for the worker [HPA] |
 | worker.autoscaling.maxReplicas | int | `5` | Maximum number of replicas for the worker [HPA] |
 | worker.autoscaling.minReplicas | int | `1` | Minimum number of replicas for the worker [HPA] |
 | worker.autoscaling.scaleTargetRef | object | `{"apiVersion":"apps/v1","kind":"Deployment","name":"application-template-worker"}` | scaleTargetRef.name is same value with worker.name |
