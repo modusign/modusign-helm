@@ -41,7 +41,7 @@ spec:
             summary: "[{{ include "application.worker.name" . | title }}] High memory usage"
             description: "[{{ include "application.worker.name" . | title }}] 서비스의 최근 메모리 사용량이 {{ .Values.worker.observability.prometheus.alerting_rules.highMemoryUsageThreshold }}% 이상이 되었습니다. 현재값: {{`{{ .Value | humanize }}`}}%"
     {{- end }}
-    {{- if .Values.worker.observability.prometheus.istio_alerting_rules.enabled }}
+    {{- if and .Values.worker.observability.prometheus.istio_alerting_rules.enabled (eq (include "application.worker.istio.mode" .) "sidecar") }}
     - name: IstioContainerResourceUsage
       rules:
         - alert: "HighIstioContainerCPUUsage"

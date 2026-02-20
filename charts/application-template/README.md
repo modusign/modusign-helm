@@ -1,6 +1,6 @@
 # application-template
 
-![Version: 1.8.8](https://img.shields.io/badge/Version-1.8.8-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.9.0](https://img.shields.io/badge/Version-1.9.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for Modusign Applications
 
@@ -31,6 +31,7 @@ Kubernetes: `>=1.23`
 | global.image.repository | string | `"application-template"` | repository applied to all deployments |
 | global.image.tag | string | `"1.0.0"` | global image tag |
 | global.imagePullSecrets | list | `[]` | Secrets with credentials to pull images from a private registry |
+| global.istio.mode | string | `"sidecar"` | Istio dataplane mode: "sidecar" or "ambient" |
 | global.minReadySeconds | int | `60` | optional field that specifies the minimum number of seconds for which a newly created Pod should be ready without any of its containers crashing |
 | global.nodeSelector | object | `{}` | Default node selector for all components |
 | global.observability.datadog | object | `{"admissionController":{"enabled":false}}` | inject datadog admission controller env label |
@@ -78,8 +79,14 @@ Kubernetes: `>=1.23`
 | scheduler.initContainers | list | `[]` | Init containers to add to the application scheduler pod |
 | scheduler.istio.destinationRules | list | `[]` | destinationRule configuration |
 | scheduler.istio.enabled | bool | `false` | Create istio resources |
+| scheduler.istio.httpRoutes | list | `[]` | Kubernetes Gateway API HTTPRoute 리소스 배열 |
 | scheduler.istio.ingressGateways | list | `[]` | ingress gateway configuration |
+| scheduler.istio.mode | string | `""` | Override global istio mode for this component (sidecar | ambient). Empty = use global. |
+| scheduler.istio.useWaypoint | string | `""` | Service에 istio.io/use-waypoint 레이블 추가 (waypoint 이름 지정) |
 | scheduler.istio.virtualServices | list | `[]` | virtualService configuration |
+| scheduler.istio.waypoint | object | `{"enabled":false,"for":"all","name":""}` | Waypoint proxy Gateway 설정 |
+| scheduler.istio.waypoint.for | string | `"all"` | Waypoint 대상: all | workload | service |
+| scheduler.istio.waypoint.name | string | `""` | Waypoint 이름. 비어있으면 컴포넌트명 사용 |
 | scheduler.lifecycle | object | `{}` | Specify postStart and preStop lifecycle hooks for your container |
 | scheduler.nodeSelector | object | `{}` (defaults to global.nodeSelector) | [Node selector] |
 | scheduler.observability.prometheus.alerting_rules | object | `{"enabled":false,"highCpuUsageThreshold":70,"highMemoryUsageThreshold":70}` | create Prometheus Operator PrometheusRule CR for service container |
@@ -145,8 +152,14 @@ Kubernetes: `>=1.23`
 | server.initContainers | list | `[]` | Init containers to add to the application server pod |
 | server.istio.destinationRules | list | `[]` | destinationRule configuration |
 | server.istio.enabled | bool | `true` | Create istio resources |
+| server.istio.httpRoutes | list | `[]` | Kubernetes Gateway API HTTPRoute 리소스 배열 |
 | server.istio.ingressGateways | list | `[]` | ingress gateway configuration |
+| server.istio.mode | string | `""` | Override global istio mode for this component (sidecar | ambient). Empty = use global. |
+| server.istio.useWaypoint | string | `""` | Service에 istio.io/use-waypoint 레이블 추가 (waypoint 이름 지정) |
 | server.istio.virtualServices | list | `[]` | virtualService configuration |
+| server.istio.waypoint | object | `{"enabled":false,"for":"all","name":""}` | Waypoint proxy Gateway 설정 |
+| server.istio.waypoint.for | string | `"all"` | Waypoint 대상: all | workload | service |
+| server.istio.waypoint.name | string | `""` | Waypoint 이름. 비어있으면 컴포넌트명 사용 |
 | server.lifecycle | object | `{}` | Specify postStart and preStop lifecycle hooks for your container |
 | server.nodeSelector | object | `{}` (defaults to global.nodeSelector) | [Node selector] |
 | server.observability.prometheus.alerting_rules | object | `{"enabled":false,"highCpuUsageThreshold":70,"highMemoryUsageThreshold":70}` | create Prometheus Operator PrometheusRule CR for service container |
@@ -210,8 +223,14 @@ Kubernetes: `>=1.23`
 | worker.initContainers | list | `[]` | Init containers to add to the application worker pod |
 | worker.istio.destinationRules | list | `[]` | destinationRule configuration |
 | worker.istio.enabled | bool | `false` | Create istio resources |
+| worker.istio.httpRoutes | list | `[]` | Kubernetes Gateway API HTTPRoute 리소스 배열 |
 | worker.istio.ingressGateways | list | `[]` | ingress gateway configuration |
+| worker.istio.mode | string | `""` | Override global istio mode for this component (sidecar | ambient). Empty = use global. |
+| worker.istio.useWaypoint | string | `""` | Service에 istio.io/use-waypoint 레이블 추가 (waypoint 이름 지정) |
 | worker.istio.virtualServices | list | `[]` | virtualService configuration |
+| worker.istio.waypoint | object | `{"enabled":false,"for":"all","name":""}` | Waypoint proxy Gateway 설정 |
+| worker.istio.waypoint.for | string | `"all"` | Waypoint 대상: all | workload | service |
+| worker.istio.waypoint.name | string | `""` | Waypoint 이름. 비어있으면 컴포넌트명 사용 |
 | worker.lifecycle | object | `{}` | Specify postStart and preStop lifecycle hooks for your container |
 | worker.nodeSelector | object | `{}` (defaults to global.nodeSelector) | [Node selector] |
 | worker.observability.prometheus.alerting_rules | object | `{"enabled":false,"highCpuUsageThreshold":70,"highMemoryUsageThreshold":70}` | create Prometheus Operator PrometheusRule CR for service container |

@@ -102,6 +102,10 @@ global:
     #     - "example.com"
     #     - "www.example.com"
 
+  istio:
+    # -- Istio dataplane mode: "sidecar" or "ambient"
+    mode: sidecar
+
   # -- Security context for all containers
   securityContext: {}
 
@@ -466,13 +470,29 @@ server:
   istio:
     # -- Create istio resources
     enabled: true
+    # -- Override global istio mode for this component (sidecar | ambient). Empty = use global.
+    mode: ""
 
+    # --- Sidecar mode resources ---
     # -- ingress gateway configuration
     ingressGateways: []
     # -- virtualService configuration
     virtualServices: []
     # -- destinationRule configuration
     destinationRules: []
+
+    # --- Ambient mode resources ---
+    # -- Waypoint proxy Gateway 설정
+    waypoint:
+      enabled: false
+      # -- Waypoint 이름. 비어있으면 컴포넌트명 사용
+      name: ""
+      # -- Waypoint 대상: all | workload | service
+      for: all
+    # -- Kubernetes Gateway API HTTPRoute 리소스 배열
+    httpRoutes: []
+    # -- Service에 istio.io/use-waypoint 레이블 추가 (waypoint 이름 지정)
+    useWaypoint: ""
 
   observability:
     prometheus:
@@ -769,13 +789,29 @@ worker:
   istio:
     # -- Create istio resources
     enabled: false
+    # -- Override global istio mode for this component (sidecar | ambient). Empty = use global.
+    mode: ""
 
+    # --- Sidecar mode resources ---
     # -- ingress gateway configuration
     ingressGateways: []
     # -- virtualService configuration
     virtualServices: []
     # -- destinationRule configuration
     destinationRules: []
+
+    # --- Ambient mode resources ---
+    # -- Waypoint proxy Gateway 설정
+    waypoint:
+      enabled: false
+      # -- Waypoint 이름. 비어있으면 컴포넌트명 사용
+      name: ""
+      # -- Waypoint 대상: all | workload | service
+      for: all
+    # -- Kubernetes Gateway API HTTPRoute 리소스 배열
+    httpRoutes: []
+    # -- Service에 istio.io/use-waypoint 레이블 추가 (waypoint 이름 지정)
+    useWaypoint: ""
 
   observability:
     prometheus:
@@ -1076,13 +1112,29 @@ scheduler:
   istio:
     # -- Create istio resources
     enabled: false
+    # -- Override global istio mode for this component (sidecar | ambient). Empty = use global.
+    mode: ""
 
+    # --- Sidecar mode resources ---
     # -- ingress gateway configuration
     ingressGateways: []
     # -- virtualService configuration
     virtualServices: []
     # -- destinationRule configuration
     destinationRules: []
+
+    # --- Ambient mode resources ---
+    # -- Waypoint proxy Gateway 설정
+    waypoint:
+      enabled: false
+      # -- Waypoint 이름. 비어있으면 컴포넌트명 사용
+      name: ""
+      # -- Waypoint 대상: all | workload | service
+      for: all
+    # -- Kubernetes Gateway API HTTPRoute 리소스 배열
+    httpRoutes: []
+    # -- Service에 istio.io/use-waypoint 레이블 추가 (waypoint 이름 지정)
+    useWaypoint: ""
 
   observability:
     prometheus:

@@ -1,4 +1,4 @@
-{{- if .Values.server.istio.enabled }}
+{{- if and .Values.server.istio.enabled (eq (include "application.server.istio.mode" .) "sidecar") }}
 {{- if .Values.server.istio.ingressGateways }}
 {{- range $index, $gateway := .Values.server.istio.ingressGateways }}
 {{- with $gateway }}

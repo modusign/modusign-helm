@@ -131,6 +131,21 @@ app: {{ include "application.worker.name" . }}
 
 
 {{/*
+Istio mode helpers - determine sidecar or ambient per component
+*/}}
+{{- define "application.server.istio.mode" -}}
+{{- .Values.server.istio.mode | default .Values.global.istio.mode | default "sidecar" }}
+{{- end }}
+
+{{- define "application.worker.istio.mode" -}}
+{{- .Values.worker.istio.mode | default .Values.global.istio.mode | default "sidecar" }}
+{{- end }}
+
+{{- define "application.scheduler.istio.mode" -}}
+{{- .Values.scheduler.istio.mode | default .Values.global.istio.mode | default "sidecar" }}
+{{- end }}
+
+{{/*
 Create the name of the controller service account to use
 */}}
 {{- define "server.serviceAccountName" -}}

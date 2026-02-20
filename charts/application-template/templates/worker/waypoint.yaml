@@ -1,0 +1,18 @@
+{{- if .Values.worker.enabled }}
+{{- if and .Values.worker.istio.enabled (eq (include "application.worker.istio.mode" .) "ambient") .Values.worker.istio.waypoint.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ .Values.worker.istio.waypoint.name | default (include "application.worker.name" .) }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "application.worker.labels" . | nindent 4 }}
+    istio.io/waypoint-for: {{ .Values.worker.istio.waypoint.for | default "all" }}
+spec:
+  gatewayClassName: istio-waypoint
+  listeners:
+    - name: mesh
+      port: 15008
+      protocol: HBONE
+{{- end }}
+{{- end }}
