@@ -1,5 +1,5 @@
 {{- if .Values.server.enabled }}
-{{- if and .Values.server.istio.enabled (eq (include "application.server.istio.mode" .) "ambient") .Values.server.istio.waypoint.enabled }}
+{{- if and .Values.server.istio.enabled .Values.server.istio.waypoint.enabled }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:

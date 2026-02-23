@@ -1,5 +1,5 @@
 {{- if .Values.worker.enabled }}
-{{- if and .Values.worker.istio.enabled (eq (include "application.worker.istio.mode" .) "sidecar") }}
+{{- if .Values.worker.istio.enabled }}
 {{- range $index, $destinationRule := .Values.worker.istio.destinationRules }}
 {{- with $destinationRule }}
 apiVersion: networking.istio.io/v1alpha3

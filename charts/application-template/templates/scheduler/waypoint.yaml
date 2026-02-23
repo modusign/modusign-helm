@@ -1,5 +1,5 @@
 {{- if .Values.scheduler.enabled }}
-{{- if and .Values.scheduler.istio.enabled (eq (include "application.scheduler.istio.mode" .) "ambient") .Values.scheduler.istio.waypoint.enabled }}
+{{- if and .Values.scheduler.istio.enabled .Values.scheduler.istio.waypoint.enabled }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:

@@ -1,5 +1,5 @@
 {{- if .Values.server.enabled }}
-{{- if and .Values.server.istio.enabled (eq (include "application.server.istio.mode" .) "ambient") }}
+{{- if .Values.server.istio.enabled }}
 {{- range $index, $httpRoute := .Values.server.istio.httpRoutes }}
 {{- with $httpRoute }}
 apiVersion: gateway.networking.k8s.io/v1

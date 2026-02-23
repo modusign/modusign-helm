@@ -1,4 +1,4 @@
-{{- if and .Values.scheduler.istio.enabled (eq (include "application.scheduler.istio.mode" .) "sidecar") }}
+{{- if .Values.scheduler.istio.enabled }}
 {{- if .Values.scheduler.istio.ingressGateways }}
 {{- range $index, $gateway := .Values.scheduler.istio.ingressGateways }}
 {{- with $gateway }}
