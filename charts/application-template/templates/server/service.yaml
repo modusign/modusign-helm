@@ -5,6 +5,9 @@ metadata:
   name: {{ include "application.server.name" . }}
   labels:
     {{- include "application.server.labels" . | nindent 4 }}
+    {{- if .Values.server.istio.useWaypoint }}
+    istio.io/use-waypoint: {{ .Values.server.istio.useWaypoint }}
+    {{- end }}
 spec:
   ports:
 {{- range .Values.server.ports }}

@@ -5,6 +5,9 @@ metadata:
   name: {{ include "application.worker.name" . }}
   labels:
     {{- include "application.worker.labels" . | nindent 4 }}
+    {{- if .Values.worker.istio.useWaypoint }}
+    istio.io/use-waypoint: {{ .Values.worker.istio.useWaypoint }}
+    {{- end }}
 spec:
   ports:
 {{- range .Values.worker.ports }}

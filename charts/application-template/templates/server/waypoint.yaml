@@ -1,0 +1,18 @@
+{{- if .Values.server.enabled }}
+{{- if and .Values.server.istio.enabled .Values.server.istio.waypoint.enabled }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ .Values.server.istio.waypoint.name | default (include "application.server.name" .) }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "application.server.labels" . | nindent 4 }}
+    istio.io/waypoint-for: {{ .Values.server.istio.waypoint.for | default "all" }}
+spec:
+  gatewayClassName: istio-waypoint
+  listeners:
+    - name: mesh
+      port: 15008
+      protocol: HBONE
+{{- end }}
+{{- end }}

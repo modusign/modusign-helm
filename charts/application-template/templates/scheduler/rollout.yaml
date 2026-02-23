@@ -47,6 +47,9 @@ spec:
       labels:
         {{- include "application.scheduler.selectorLabels" . | nindent 8 }}
         {{- include "application.scheduler.labels" . | nindent 8 }}
+        {{- if eq (include "application.scheduler.istio.mode" .) "ambient" }}
+        istio.io/dataplane-mode: ambient
+        {{- end }}
         {{- with (mergeOverwrite (deepCopy .Values.global.podLabels) .Values.scheduler.podLabels) }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
