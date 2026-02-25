@@ -337,6 +337,10 @@ server:
       memory: "1600Mi"
       cpu: "800m"
 
+  # -- Additional services to create (e.g., canary service for Gateway API canary deployment)
+  extraServices: []
+    # - authz-canary
+
   ports:
     - name: http
       port: 80

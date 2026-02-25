@@ -1,6 +1,6 @@
 # application-template
 
-![Version: 1.9.0](https://img.shields.io/badge/Version-1.9.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.9.1](https://img.shields.io/badge/Version-1.9.1-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for Modusign Applications
 
@@ -144,6 +144,7 @@ Kubernetes: `>=1.23`
 | server.extraConfigMaps | list | `[]` | Additional configMaps to pass to server |
 | server.extraEnvs | list | `[]` | extra envs to pass to server |
 | server.extraSecrets | list | `[]` | extra secrets to pass to server |
+| server.extraServices | list | `[]` | Additional services to create (e.g., canary service for Gateway API canary deployment) |
 | server.hostAliases | list | `[]` | hostAliases for server containers |
 | server.image.hub | string | `""` | hub applied to server deployments |
 | server.image.imagePullPolicy | string | `""` | imagePullPolicy applied to server deployments |
