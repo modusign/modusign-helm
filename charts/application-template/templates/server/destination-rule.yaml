@@ -12,8 +12,10 @@ spec:
   host: {{ .host }}
   trafficPolicy:
     {{- toYaml .trafficPolicy | nindent 4 }}
+  {{- if .subsets }}
   subsets:
     {{- tpl (.subsets | nindent 4) $ }}
+  {{- end }}
 {{- end }}
 ---
 {{- end }}
