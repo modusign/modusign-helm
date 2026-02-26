@@ -3,6 +3,22 @@ entries:
   application-template:
   - apiVersion: v2
     appVersion: v1.0.0
+    created: "2026-02-26T00:49:13.680917271Z"
+    description: A Helm chart for Modusign Applications
+    digest: 9bc0b07f0f492cdc9a929bb848fab8c0cd18043e67b4977a6bfa534015e5c0e0
+    home: https://app.modusign.co.kr
+    keywords:
+    - modusign
+    kubeVersion: '>=1.23'
+    maintainers:
+    - name: modusign
+      url: https://github.com/modusign
+    name: application-template
+    urls:
+    - https://github.com/modusign/modusign-helm/releases/download/application-template-1.9.2/application-template-1.9.2.tgz
+    version: 1.9.2
+  - apiVersion: v2
+    appVersion: v1.0.0
     created: "2026-02-25T14:14:32.873278316Z"
     description: A Helm chart for Modusign Applications
     digest: 7c72d4b7d4f79dcf57d657a5e890c475cc2abe2e0cca80ffeaef0685ba0b4cbc
@@ -580,4 +596,4 @@ entries:
     urls:
     - https://github.com/modusign/modusign-helm/releases/download/custom-resource-template-1.0.0/custom-resource-template-1.0.0.tgz
     version: 1.0.0
-generated: "2026-02-25T14:14:32.87348393Z"
+generated: "2026-02-26T00:49:13.681198366Z"
