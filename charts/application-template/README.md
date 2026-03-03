@@ -1,6 +1,6 @@
 # application-template
 
-![Version: 1.9.2](https://img.shields.io/badge/Version-1.9.2-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.10.0](https://img.shields.io/badge/Version-1.10.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for Modusign Applications
 
@@ -101,6 +101,12 @@ Kubernetes: `>=1.23`
 | scheduler.ports[0].name | string | `"http"` |  |
 | scheduler.ports[0].port | int | `80` |  |
 | scheduler.ports[0].targetPort | int | `3000` |  |
+| scheduler.priorityClass.create | bool | `false` | Create a PriorityClass resource for the scheduler |
+| scheduler.priorityClass.description | string | `""` | Description of the PriorityClass |
+| scheduler.priorityClass.globalDefault | bool | `false` | Whether this PriorityClass should be the global default |
+| scheduler.priorityClass.name | string | `""` (defaults to component name) | PriorityClass name. Used as priorityClassName in the pod spec |
+| scheduler.priorityClass.preemptionPolicy | string | `"PreemptLowerPriority"` | Preemption policy (Never or PreemptLowerPriority) |
+| scheduler.priorityClass.value | int | `0` | Priority value for the PriorityClass |
 | scheduler.replicas | int | `1` | The number of scheduler pods to run |
 | scheduler.resources | object | `{}` | Resource limits and requests for the scheduler |
 | scheduler.rolloutAnalysis | object | `{}` | Rollout analysis to be added to the scheduler Rollout |
@@ -175,6 +181,12 @@ Kubernetes: `>=1.23`
 | server.ports[0].name | string | `"http"` |  |
 | server.ports[0].port | int | `80` |  |
 | server.ports[0].targetPort | int | `3000` |  |
+| server.priorityClass.create | bool | `false` | Create a PriorityClass resource for the server |
+| server.priorityClass.description | string | `""` | Description of the PriorityClass |
+| server.priorityClass.globalDefault | bool | `false` | Whether this PriorityClass should be the global default |
+| server.priorityClass.name | string | `""` (defaults to component name) | PriorityClass name. Used as priorityClassName in the pod spec |
+| server.priorityClass.preemptionPolicy | string | `"PreemptLowerPriority"` | Preemption policy (Never or PreemptLowerPriority) |
+| server.priorityClass.value | int | `0` | Priority value for the PriorityClass |
 | server.replicas | int | `1` | The number of server pods to run |
 | server.resources | object | `{"limits":{"cpu":"800m","memory":"1600Mi"},"requests":{"cpu":"400m","memory":"800Mi"}}` | Resource limits and requests for the server |
 | server.rolloutAnalysis | object | `{"successfulRunHistoryLimit":1,"unsuccessfulRunHistoryLimit":3}` | Rollout analysis to be added to the server Rollout |
@@ -246,6 +258,12 @@ Kubernetes: `>=1.23`
 | worker.ports[0].name | string | `"http"` |  |
 | worker.ports[0].port | int | `80` |  |
 | worker.ports[0].targetPort | int | `3000` |  |
+| worker.priorityClass.create | bool | `false` | Create a PriorityClass resource for the worker |
+| worker.priorityClass.description | string | `""` | Description of the PriorityClass |
+| worker.priorityClass.globalDefault | bool | `false` | Whether this PriorityClass should be the global default |
+| worker.priorityClass.name | string | `""` (defaults to component name) | PriorityClass name. Used as priorityClassName in the pod spec |
+| worker.priorityClass.preemptionPolicy | string | `"PreemptLowerPriority"` | Preemption policy (Never or PreemptLowerPriority) |
+| worker.priorityClass.value | int | `0` | Priority value for the PriorityClass |
 | worker.replicas | int | `1` | The number of worker pods to run |
 | worker.resources | object | `{}` | Resource limits and requests for the worker |
 | worker.rolloutAnalysis | object | `{}` | Rollout analysis to be added to the worker Rollout |

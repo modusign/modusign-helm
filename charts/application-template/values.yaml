@@ -265,6 +265,22 @@ server:
       #     value: "800"
       #     containerName: "application-template-server"
 
+  ## server PriorityClass
+  priorityClass:
+    # -- Create a PriorityClass resource for the server
+    create: false
+    # -- PriorityClass name. Used as priorityClassName in the pod spec
+    # @default -- `""` (defaults to component name)
+    name: ""
+    # -- Priority value for the PriorityClass
+    value: 0
+    # -- Preemption policy (Never or PreemptLowerPriority)
+    preemptionPolicy: PreemptLowerPriority
+    # -- Whether this PriorityClass should be the global default
+    globalDefault: false
+    # -- Description of the PriorityClass
+    description: ""
+
   ## server Pod Disruption Budget
   pdb:
     # -- Deploy a [PodDisruptionBudget] for the server
@@ -604,6 +620,22 @@ worker:
       #     value: "800"
       #     containerName: "application-template-worker"
 
+  ## worker PriorityClass
+  priorityClass:
+    # -- Create a PriorityClass resource for the worker
+    create: false
+    # -- PriorityClass name. Used as priorityClassName in the pod spec
+    # @default -- `""` (defaults to component name)
+    name: ""
+    # -- Priority value for the PriorityClass
+    value: 0
+    # -- Preemption policy (Never or PreemptLowerPriority)
+    preemptionPolicy: PreemptLowerPriority
+    # -- Whether this PriorityClass should be the global default
+    globalDefault: false
+    # -- Description of the PriorityClass
+    description: ""
+
   ## worker Pod Disruption Budget
   pdb:
     # -- Deploy a [PodDisruptionBudget] for the worker
@@ -921,6 +953,22 @@ scheduler:
       #   metadata:
       #     value: "800"
       #     containerName: "application-template-scheduler"
+
+  ## scheduler PriorityClass
+  priorityClass:
+    # -- Create a PriorityClass resource for the scheduler
+    create: false
+    # -- PriorityClass name. Used as priorityClassName in the pod spec
+    # @default -- `""` (defaults to component name)
+    name: ""
+    # -- Priority value for the PriorityClass
+    value: 0
+    # -- Preemption policy (Never or PreemptLowerPriority)
+    preemptionPolicy: PreemptLowerPriority
+    # -- Whether this PriorityClass should be the global default
+    globalDefault: false
+    # -- Description of the PriorityClass
+    description: ""
 
   ## scheduler Pod Disruption Budget
   pdb:

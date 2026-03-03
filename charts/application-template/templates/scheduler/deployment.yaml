@@ -58,6 +58,9 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.scheduler.terminationGracePeriodSeconds }}
       {{- end }}
       serviceAccountName: {{ include "scheduler.serviceAccountName" . }}
+      {{- with .Values.scheduler.priorityClass.name }}
+      priorityClassName: {{ . }}
+      {{- end }}
       {{- with .Values.global.securityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
