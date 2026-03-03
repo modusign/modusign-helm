@@ -1,0 +1,18 @@
+{{- if .Values.scheduler.enabled }}
+{{- if .Values.scheduler.priorityClass.create }}
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: {{ .Values.scheduler.priorityClass.name | default (include "application.scheduler.name" .) }}
+  labels:
+    {{- include "application.scheduler.labels" . | nindent 4 }}
+value: {{ .Values.scheduler.priorityClass.value }}
+{{- with .Values.scheduler.priorityClass.preemptionPolicy }}
+preemptionPolicy: {{ . }}
+{{- end }}
+globalDefault: {{ .Values.scheduler.priorityClass.globalDefault | default false }}
+{{- with .Values.scheduler.priorityClass.description }}
+description: {{ . | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
