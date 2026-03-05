@@ -509,6 +509,8 @@ server:
       name: ""
       # -- Waypoint 대상: all | workload | service
       for: all
+    # -- Kubernetes Gateway API Gateway 리소스 배열
+    gateways: []
     # -- Kubernetes Gateway API HTTPRoute 리소스 배열
     httpRoutes: []
     # -- Service에 istio.io/use-waypoint 레이블 추가 (waypoint 이름 지정)
@@ -844,6 +846,8 @@ worker:
       name: ""
       # -- Waypoint 대상: all | workload | service
       for: all
+    # -- Kubernetes Gateway API Gateway 리소스 배열
+    gateways: []
     # -- Kubernetes Gateway API HTTPRoute 리소스 배열
     httpRoutes: []
     # -- Service에 istio.io/use-waypoint 레이블 추가 (waypoint 이름 지정)
@@ -1183,6 +1187,8 @@ scheduler:
       name: ""
       # -- Waypoint 대상: all | workload | service
       for: all
+    # -- Kubernetes Gateway API Gateway 리소스 배열
+    gateways: []
     # -- Kubernetes Gateway API HTTPRoute 리소스 배열
     httpRoutes: []
     # -- Service에 istio.io/use-waypoint 레이블 추가 (waypoint 이름 지정)

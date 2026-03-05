@@ -1,0 +1,29 @@
+{{- if .Values.server.enabled }}
+{{- if .Values.server.istio.enabled }}
+{{- range $index, $gateway := .Values.server.istio.gateways }}
+{{- with $gateway }}
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ .name }}
+  labels:
+    {{- include "application.server.labels" $ | nindent 4 }}
+spec:
+  gatewayClassName: {{ .gatewayClassName }}
+  {{- with .addresses }}
+  addresses:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .infrastructure }}
+  infrastructure:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .listeners }}
+  listeners:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}
+---
+{{- end }}
+{{- end }}
+{{- end }}

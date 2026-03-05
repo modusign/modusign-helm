@@ -1,6 +1,6 @@
 # application-template
 
-![Version: 1.10.0](https://img.shields.io/badge/Version-1.10.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.11.0](https://img.shields.io/badge/Version-1.11.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for Modusign Applications
 
@@ -79,6 +79,7 @@ Kubernetes: `>=1.23`
 | scheduler.initContainers | list | `[]` | Init containers to add to the application scheduler pod |
 | scheduler.istio.destinationRules | list | `[]` | destinationRule configuration |
 | scheduler.istio.enabled | bool | `false` | Create istio resources |
+| scheduler.istio.gateways | list | `[]` | Kubernetes Gateway API Gateway 리소스 배열 |
 | scheduler.istio.httpRoutes | list | `[]` | Kubernetes Gateway API HTTPRoute 리소스 배열 |
 | scheduler.istio.ingressGateways | list | `[]` | ingress gateway configuration |
 | scheduler.istio.mode | string | `""` | Override global istio mode for this component (sidecar | ambient). Empty = use global. |
@@ -159,6 +160,7 @@ Kubernetes: `>=1.23`
 | server.initContainers | list | `[]` | Init containers to add to the application server pod |
 | server.istio.destinationRules | list | `[]` | destinationRule configuration |
 | server.istio.enabled | bool | `true` | Create istio resources |
+| server.istio.gateways | list | `[]` | Kubernetes Gateway API Gateway 리소스 배열 |
 | server.istio.httpRoutes | list | `[]` | Kubernetes Gateway API HTTPRoute 리소스 배열 |
 | server.istio.ingressGateways | list | `[]` | ingress gateway configuration |
 | server.istio.mode | string | `""` | Override global istio mode for this component (sidecar | ambient). Empty = use global. |
@@ -236,6 +238,7 @@ Kubernetes: `>=1.23`
 | worker.initContainers | list | `[]` | Init containers to add to the application worker pod |
 | worker.istio.destinationRules | list | `[]` | destinationRule configuration |
 | worker.istio.enabled | bool | `false` | Create istio resources |
+| worker.istio.gateways | list | `[]` | Kubernetes Gateway API Gateway 리소스 배열 |
 | worker.istio.httpRoutes | list | `[]` | Kubernetes Gateway API HTTPRoute 리소스 배열 |
 | worker.istio.ingressGateways | list | `[]` | ingress gateway configuration |
 | worker.istio.mode | string | `""` | Override global istio mode for this component (sidecar | ambient). Empty = use global. |
