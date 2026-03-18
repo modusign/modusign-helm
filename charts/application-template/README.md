@@ -1,10 +1,40 @@
 # application-template
 
-![Version: 1.11.0](https://img.shields.io/badge/Version-1.11.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.12.0](https://img.shields.io/badge/Version-1.12.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for Modusign Applications
 
 **Homepage:** <https://app.modusign.co.kr>
+
+## Testing
+
+차트 템플릿 유닛 테스트는 [helm-unittest](https://github.com/helm-unittest/helm-unittest)를 사용합니다.
+
+### 설치
+
+```bash
+helm plugin install https://github.com/helm-unittest/helm-unittest.git --verify=false
+```
+
+### 테스트 실행
+
+```bash
+# 전체 테스트 실행
+helm unittest charts/application-template
+
+# hooks 테스트만 실행
+helm unittest charts/application-template -f 'tests/hooks/*_test.yaml'
+```
+
+### 테스트 구조
+
+```
+tests/
+└── hooks/
+    ├── job_test.yaml             # hooks/job.yaml 템플릿 테스트
+    ├── secret_test.yaml          # hooks/secret.yaml 템플릿 테스트
+    └── service_account_test.yaml # hooks/service-account.yaml 템플릿 테스트
+```
 
 ## Maintainers
 
