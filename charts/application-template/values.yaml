@@ -162,11 +162,14 @@ hook:
     #   command: ["sh", "-c"]
     #   args: ["echo 'Running pre-install job'"]
     #   # -- serviceAccount(Optional)
-    #   # When enabled, a service account will be created with the name of the job
-    #   # If the name is not specified or create is false, it will be set to the name of the job
-    #   serviceAccount:
-    #     create: true
-    #     name: application-template-pre-install-job
+    #   # To use an existing ServiceAccount (e.g. IRSA), set create: false and specify name.
+    #   # To create a new ServiceAccount, set create: true.
+    #   # serviceAccount:
+    #   #   create: false
+    #   #   name: my-existing-irsa           # use existing SA (no SA resource created)
+    #   # serviceAccount:
+    #   #   create: true
+    #   #   name: application-template-pre-install-job  # create new SA with this name
     #   envFrom: []
     #   # -- envs(Optional)
     #   env: []
