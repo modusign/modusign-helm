@@ -8,6 +8,15 @@ metadata:
   name: {{ printf "%s-%s" $.Release.Name .name | trunc 63 | trimSuffix "-" }}
   namespace: {{ $.Release.Namespace }}
   annotations:
+    {{- if .argocd }}
+    argocd.argoproj.io/hook: {{ .argocd.hook | default "PreSync" }}
+    {{- if .argocd.syncWave }}
+    argocd.argoproj.io/sync-wave: {{ .argocd.syncWave | quote }}
+    {{- end }}
+    {{- if .argocd.hookDeletePolicy }}
+    argocd.argoproj.io/hook-delete-policy: {{ .argocd.hookDeletePolicy }}
+    {{- end }}
+    {{- else }}
     "helm.sh/hook": {{ .hook | default "pre-install" | quote }}
     {{- if .hookWeight }}
     "helm.sh/hook-weight": {{ .hookWeight | quote }}
@@ -16,6 +25,7 @@ metadata:
     "helm.sh/hook-delete-policy": {{ .hookDeletePolicy | join "," | quote }}
     {{- else }}
     "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+    {{- end }}
     {{- end }}
   labels:
     {{- include "application.commonLabels" $ | nindent 4 }}
@@ -85,12 +95,12 @@ spec:
         env:
           {{- toYaml . | nindent 10 }}
         {{- end }}
-        {{- if or .envFrom (.vault.enabled | default false) }}
+        {{- if or .envFrom ((.vault).enabled | default false) }}
         envFrom:
           {{- if .envFrom }}
           {{- toYaml .envFrom | nindent 10 }}
           {{- end }}
-          {{- if .vault.enabled | default false }}
+          {{- if ((.vault).enabled | default false) }}
           - secretRef:
               name: {{ .vault.name | default (printf "%s-%s" $.Release.Name $job.name | trunc 63 | trimSuffix "-") }}
           {{- end }}

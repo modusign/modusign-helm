@@ -20,3 +20,5 @@
 .idea/
 *.tmproj
 .vscode/
+# Test files
+tests/

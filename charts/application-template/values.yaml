@@ -139,26 +139,37 @@ hook:
   jobs:
     []
     # - name: pre-install-job
-    #   # -- hook type(Required)
+    #   # -- hook type(Required) - Helm hook type (ignored when argocd is set)
     #   # pre-install, post-install, pre-upgrade, post-upgrade, pre-delete, post-delete
     #   hook: pre-install
-    #   # -- hookWeight(Optional) - Weight of the hook
+    #   # -- hookWeight(Optional) - Weight of the hook (Helm only)
     #   hookWeight: "5"
-    #   # -- hookDeletePolicy(Optional) - List of hook delete policies
+    #   # -- hookDeletePolicy(Optional) - List of hook delete policies (Helm only)
     #   hookDeletePolicy:
     #     - before-hook-creation
     #     - hook-succeeded
+    #   # -- argocd(Optional) - ArgoCD hook configuration
+    #   # When set, ArgoCD annotations are used instead of Helm hook annotations.
+    #   # ArgoCD hook types: PreSync, Sync, PostSync, SyncFail, Skip
+    #   # argocd:
+    #   #   hook: PreSync
+    #   #   syncWave: "-1"
+    #   #   # ArgoCD hookDeletePolicy: HookSucceeded, HookFailed, BeforeHookCreation
+    #   #   hookDeletePolicy: BeforeHookCreation
     #   image:
     #     repository: busybox
     #     tag: latest
     #   command: ["sh", "-c"]
     #   args: ["echo 'Running pre-install job'"]
     #   # -- serviceAccount(Optional)
-    #   # When enabled, a service account will be created with the name of the job
-    #   # If the name is not specified or create is false, it will be set to the name of the job
-    #   serviceAccount:
-    #     create: true
-    #     name: application-template-pre-install-job
+    #   # To use an existing ServiceAccount (e.g. IRSA), set create: false and specify name.
+    #   # To create a new ServiceAccount, set create: true.
+    #   # serviceAccount:
+    #   #   create: false
+    #   #   name: my-existing-irsa           # use existing SA (no SA resource created)
+    #   # serviceAccount:
+    #   #   create: true
+    #   #   name: application-template-pre-install-job  # create new SA with this name
     #   envFrom: []
     #   # -- envs(Optional)
     #   env: []
@@ -170,6 +181,12 @@ hook:
     #     path: stage-default/application/job/${service}
     #     secrets:
     #       test: test
+    #     # -- argocd(Optional) - ArgoCD hook annotations for the vault Secret
+    #     # When set, ArgoCD annotations are used instead of Helm hook annotations.
+    #     # argocd:
+    #     #   hook: PreSync
+    #     #   syncWave: "-2"
+    #     #   hookDeletePolicy: HookSucceeded
     # - name: post-install-job
     #   hook: post-install
     #   command: ["sh", "-c"]
