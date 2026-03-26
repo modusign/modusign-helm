@@ -1223,3 +1223,30 @@ scheduler:
         enabled: false
         highCpuUsageThreshold: 70
         highMemoryUsageThreshold: 70
+
+# -- Extra Kubernetes manifests to deploy alongside the chart.
+# Each entry can be a structured object or a string with Go template syntax.
+# The chart root context is available for template interpolation.
+extraObjects: []
+  # Structured object format:
+  # - apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: my-extra-config
+  #   data:
+  #     key: value
+  #
+  # - apiVersion: external-secrets.io/v1beta1
+  #   kind: ExternalSecret
+  #   metadata:
+  #     name: my-secret
+  #   spec: {}
+  #
+  # String format with Helm template interpolation:
+  # - |
+  #   apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: {{ include "application.server.name" . }}-extra
+  #   data:
+  #     env: {{ .Values.global.runtimeEnv }}
