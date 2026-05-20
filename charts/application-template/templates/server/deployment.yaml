@@ -160,6 +160,9 @@ spec:
         securityContext:
           {{- toYaml . | nindent 10 }}
         {{- end }}
+      {{- with .Values.server.extraContainers }}
+        {{- tpl (toYaml .) $ | nindent 6 }}
+      {{- end }}
       {{- with .Values.server.initContainers }}
       initContainers:
       {{- range $index, $container := . }}

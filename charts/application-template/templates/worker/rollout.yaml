@@ -164,6 +164,9 @@ spec:
         securityContext:
           {{- toYaml . | nindent 10 }}
         {{- end }}
+      {{- with .Values.worker.extraContainers }}
+        {{- tpl (toYaml .) $ | nindent 6 }}
+      {{- end }}
       {{- with .Values.worker.initContainers }}
       initContainers:
       {{- range $index, $container := . }}
