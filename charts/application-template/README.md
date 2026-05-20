@@ -1,40 +1,10 @@
 # application-template
 
-![Version: 1.12.0](https://img.shields.io/badge/Version-1.12.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.12.2](https://img.shields.io/badge/Version-1.12.2-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for Modusign Applications
 
 **Homepage:** <https://app.modusign.co.kr>
-
-## Testing
-
-차트 템플릿 유닛 테스트는 [helm-unittest](https://github.com/helm-unittest/helm-unittest)를 사용합니다.
-
-### 설치
-
-```bash
-helm plugin install https://github.com/helm-unittest/helm-unittest.git --verify=false
-```
-
-### 테스트 실행
-
-```bash
-# 전체 테스트 실행
-helm unittest charts/application-template
-
-# hooks 테스트만 실행
-helm unittest charts/application-template -f 'tests/hooks/*_test.yaml'
-```
-
-### 테스트 구조
-
-```
-tests/
-└── hooks/
-    ├── job_test.yaml             # hooks/job.yaml 템플릿 테스트
-    ├── secret_test.yaml          # hooks/secret.yaml 템플릿 테스트
-    └── service_account_test.yaml # hooks/service-account.yaml 템플릿 테스트
-```
 
 ## Maintainers
 
@@ -50,6 +20,7 @@ Kubernetes: `>=1.23`
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| extraObjects | list | `[]` | Extra Kubernetes manifests to deploy alongside the chart. Each entry can be a structured object or a string with Go template syntax. The chart root context is available for template interpolation. |
 | global.additionalLabels | object | `{}` | Common labels for the all resources |
 | global.affinity | object | `{}` |  |
 | global.deploymentAnnotations | object | `{}` | Annotations for the all deployed Deployments |
@@ -99,6 +70,7 @@ Kubernetes: `>=1.23`
 | scheduler.extraArgs | list | `[]` | Additional command line arguments to pass to scheduler |
 | scheduler.extraCommands | list | `[]` | Additional command line arguments to pass to scheduler |
 | scheduler.extraConfigMaps | list | `[]` | Additional configMaps to pass to scheduler |
+| scheduler.extraContainers | list | `[]` | Extra sidecar containers to add to the application scheduler pod (rendered with `tpl`, K8s native container spec) |
 | scheduler.extraEnvs | list | `[]` | extra envs to pass to shceduler |
 | scheduler.extraSecrets | list | `[]` | extra secrets to pass to scheduler |
 | scheduler.hostAliases | list | `[]` | hostAliases for scheduler containers |
@@ -179,6 +151,7 @@ Kubernetes: `>=1.23`
 | server.extraArgs | list | `[]` | Additional command line arguments to pass to server |
 | server.extraCommands | list | `[]` | Additional command line arguments to pass to server |
 | server.extraConfigMaps | list | `[]` | Additional configMaps to pass to server |
+| server.extraContainers | list | `[]` | Extra sidecar containers to add to the application server pod (rendered with `tpl`, K8s native container spec) |
 | server.extraEnvs | list | `[]` | extra envs to pass to server |
 | server.extraSecrets | list | `[]` | extra secrets to pass to server |
 | server.extraServices | list | `[]` | Additional services to create (e.g., canary service for Gateway API canary deployment) |
@@ -258,6 +231,7 @@ Kubernetes: `>=1.23`
 | worker.extraArgs | list | `[]` | Additional command line arguments to pass to worker |
 | worker.extraCommands | list | `[]` | Additional command line arguments to pass to worker |
 | worker.extraConfigMaps | list | `[]` | Additional configMaps to pass to worker |
+| worker.extraContainers | list | `[]` | Extra sidecar containers to add to the application worker pod (rendered with `tpl`, K8s native container spec) |
 | worker.extraEnvs | list | `[]` | extra envs to pass to worker |
 | worker.extraSecrets | list | `[]` | extra secrets to pass to worker |
 | worker.hostAliases | list | `[]` | hostAliases for worker containers |

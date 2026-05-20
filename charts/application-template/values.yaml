@@ -452,6 +452,18 @@ server:
   #      - mountPath: /custom-tools
   #        name: custom-tools
 
+  # -- Extra sidecar containers to add to the application server pod (rendered with `tpl`, K8s native container spec)
+  extraContainers: []
+  #  - name: my-sidecar
+  #    image: my-sidecar:tag
+  #    imagePullPolicy: IfNotPresent
+  #    ports:
+  #      - name: metrics
+  #        containerPort: 9090
+  #    volumeMounts:
+  #      - name: shared
+  #        mountPath: /shared
+
   # -- Additional volumeMounts to the application server main container
   volumeMounts: []
   #  - mountPath: /usr/local/bin/kubelogin
@@ -787,6 +799,18 @@ worker:
   #    volumeMounts:
   #      - mountPath: /custom-tools
   #        name: custom-tools
+
+  # -- Extra sidecar containers to add to the application worker pod (rendered with `tpl`, K8s native container spec)
+  extraContainers: []
+  #  - name: my-sidecar
+  #    image: my-sidecar:tag
+  #    imagePullPolicy: IfNotPresent
+  #    ports:
+  #      - name: metrics
+  #        containerPort: 9090
+  #    volumeMounts:
+  #      - name: shared
+  #        mountPath: /shared
 
   # -- Additional volumeMounts to the application worker main container
   volumeMounts: []
@@ -1128,6 +1152,18 @@ scheduler:
   #    volumeMounts:
   #      - mountPath: /custom-tools
   #        name: custom-tools
+
+  # -- Extra sidecar containers to add to the application scheduler pod (rendered with `tpl`, K8s native container spec)
+  extraContainers: []
+  #  - name: my-sidecar
+  #    image: my-sidecar:tag
+  #    imagePullPolicy: IfNotPresent
+  #    ports:
+  #      - name: metrics
+  #        containerPort: 9090
+  #    volumeMounts:
+  #      - name: shared
+  #        mountPath: /shared
 
   # -- Additional volumeMounts to the application scheduler main container
   volumeMounts: []
