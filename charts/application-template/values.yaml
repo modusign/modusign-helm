@@ -118,6 +118,18 @@ global:
     path: stage-default/application/${service}
     secrets: {}
 
+  # -- OpenBao KV secret을 External Secrets Operator로 가져와 env로 주입한다
+  externalSecret:
+    enabled: false
+    # -- 인프라 레포에서 관리하는 SecretStore 참조. 차트는 SecretStore CR을 만들지 않는다
+    store:
+      kind: ClusterSecretStore
+      name: openbao
+    # -- OpenBao KV path. 이 path의 모든 키가 그대로 env 이름이 된다
+    path: stage-default/application/${service}
+    # -- ESO가 OpenBao를 다시 읽는 주기. secret이 갱신돼도 pod은 자동 재시작되지 않으므로 재시작이 필요하면 podAnnotations에 reloader 어노테이션을 추가한다
+    refreshInterval: 3m
+
   observability:
     # -- inject datadog admission controller env label
     datadog:
