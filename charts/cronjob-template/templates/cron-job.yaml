@@ -88,6 +88,10 @@ spec:
               - secretRef:
                   name: {{ include "application.name" . }}
             {{- end }}
+            {{- if .Values.externalSecret.enabled }}
+              - secretRef:
+                  name: {{ include "application.externalSecretName" . }}
+            {{- end }}
             {{- with .Values.envFrom }}
               {{- toYaml . | nindent 14 }}
             {{- end }}

@@ -6,6 +6,13 @@ Expand the name of the chart.
 {{- end }}
 
 {{/*
+ExternalSecret이 동기화하는 Secret 이름
+*/}}
+{{- define "application.externalSecretName" -}}
+{{- printf "%s-external-secrets" (include "application.name" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "application.chart" -}}
