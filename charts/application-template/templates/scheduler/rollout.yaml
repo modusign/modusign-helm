@@ -104,13 +104,13 @@ spec:
           - configMapRef:
               name: {{ include "application.scheduler.name" . }}-env
         {{- end }}
-        {{- if .Values.global.vault.enabled  }}
-          - secretRef:
-              name: {{ include "application.scheduler.name" . }}
-        {{- end }}
         {{- if .Values.global.externalSecret.enabled }}
           - secretRef:
               name: {{ include "application.scheduler.externalSecretName" . }}
+        {{- end }}
+        {{- if .Values.global.vault.enabled  }}
+          - secretRef:
+              name: {{ include "application.scheduler.name" . }}
         {{- end }}
         {{- with .Values.scheduler.envFrom }}
           {{- toYaml . | nindent 10 }}

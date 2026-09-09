@@ -30,11 +30,7 @@ Kubernetes: `>=1.23`
 | cronJob.timeZone | string | `nil` | Available timezone evalues are listed in https://en.wikipedia.org/wiki/List_of_tz_database_time_zones |
 | env | object | `{}` | Environment variables to pass to all deployed Deployments |
 | envFrom | list | `[]` | envfrom in server deployment |
-| externalSecret | object | `{"annotations":{"argocd.argoproj.io/sync-wave":"-1"},"enabled":false,"path":"stage-default/application/${service}","refreshInterval":"3m","store":{"kind":"ClusterSecretStore","name":"openbao"}}` | OpenBao KV secret을 External Secrets Operator로 가져와 env로 주입한다 |
-| externalSecret.annotations | object | `{"argocd.argoproj.io/sync-wave":"-1"}` | ExternalSecret에 붙일 어노테이션. 기본 sync-wave는 ESO가 Secret을 만든 뒤 워크로드가 뜨도록 보장한다. 즉시 재동기화가 필요하면 `force-sync: <timestamp>`를 추가한다 null로 두면 sync-wave 자체가 사라진다. 키를 추가하면 기본값과 병합되고, 완전히 덮어쓰려면 null로 지운 뒤 다시 채워야 한다 |
-| externalSecret.path | string | `"stage-default/application/${service}"` | OpenBao KV path. 이 path의 모든 키가 그대로 env 이름이 된다 |
-| externalSecret.refreshInterval | string | `"3m"` | ESO가 OpenBao를 다시 읽는 주기. secret이 갱신돼도 pod은 자동 재시작되지 않는다 |
-| externalSecret.store | object | `{"kind":"ClusterSecretStore","name":"openbao"}` | 인프라 레포에서 관리하는 SecretStore 참조. 차트는 SecretStore CR을 만들지 않는다 |
+| externalSecret | object | `{"annotations":{},"enabled":false,"path":"stage-default/application/${service}","refreshInterval":"3m","store":{"kind":"ClusterSecretStore","name":"openbao"}}` | Secrets variables to pass to the CronJob by External Secrets Operator. Requires ESO v0.15 or later |
 | extraArgs | list | `[]` | Additional command line arguments to pass to the job container |
 | extraCommands | list | `[]` | Additional command line arguments to pass to the job container |
 | extraSecrets | list | `[]` | extra secrets to pass to server |

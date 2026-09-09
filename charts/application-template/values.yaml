@@ -118,23 +118,15 @@ global:
     path: stage-default/application/${service}
     secrets: {}
 
-  # external-secrets.io/v1 API를 쓰므로 클러스터에 ESO v0.15 이상이 설치돼 있어야 한다
-  # -- OpenBao KV secret을 External Secrets Operator로 가져와 env로 주입한다
+  # -- Secrets variables to pass to all deployed Deployments by External Secrets Operator. Requires ESO v0.15 or later
   externalSecret:
     enabled: false
-    # -- 인프라 레포에서 관리하는 SecretStore 참조. 차트는 SecretStore CR을 만들지 않는다
     store:
       kind: ClusterSecretStore
       name: openbao
-    # -- OpenBao KV path. 이 path의 모든 키가 그대로 env 이름이 된다
     path: stage-default/application/${service}
-    # -- ESO가 OpenBao를 다시 읽는 주기. secret이 갱신돼도 pod은 자동 재시작되지 않으므로 재시작이 필요하면 podAnnotations에 reloader 어노테이션을 추가한다
     refreshInterval: 3m
-    # -- ExternalSecret에 붙일 어노테이션. 기본 sync-wave는 ESO가 Secret을 만든 뒤 워크로드가 뜨도록 보장한다.
-    # 즉시 재동기화가 필요하면 `force-sync: <timestamp>`를 추가한다
-    # null로 두면 sync-wave 자체가 사라진다. 키를 추가하면 기본값과 병합되고, 완전히 덮어쓰려면 null로 지운 뒤 다시 채워야 한다
-    annotations:
-      argocd.argoproj.io/sync-wave: "-1"
+    annotations: {}
 
   observability:
     # -- inject datadog admission controller env label

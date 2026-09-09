@@ -100,13 +100,13 @@ spec:
           - configMapRef:
               name: {{ include "application.name" . }}-env
         {{- end }}
-        {{- if .Values.global.vault.enabled  }}
-          - secretRef:
-              name: {{ include "application.name" . }}
-        {{- end }}
         {{- if .Values.global.externalSecret.enabled }}
           - secretRef:
               name: {{ include "application.server.externalSecretName" . }}
+        {{- end }}
+        {{- if .Values.global.vault.enabled  }}
+          - secretRef:
+              name: {{ include "application.name" . }}
         {{- end }}
         {{- with .Values.server.envFrom }}
           {{- toYaml . | nindent 10 }}
