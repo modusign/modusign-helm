@@ -1,6 +1,6 @@
 # cronjob-template
 
-![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for CronJob
 
@@ -30,6 +30,10 @@ Kubernetes: `>=1.23`
 | cronJob.timeZone | string | `nil` | Available timezone evalues are listed in https://en.wikipedia.org/wiki/List_of_tz_database_time_zones |
 | env | object | `{}` | Environment variables to pass to all deployed Deployments |
 | envFrom | list | `[]` | envfrom in server deployment |
+| externalSecret | object | `{"enabled":false,"path":"stage-default/application/${service}","refreshInterval":"3m","store":{"kind":"ClusterSecretStore","name":"openbao"}}` | OpenBao KV secret을 External Secrets Operator로 가져와 env로 주입한다 |
+| externalSecret.path | string | `"stage-default/application/${service}"` | OpenBao KV path. 이 path의 모든 키가 그대로 env 이름이 된다 |
+| externalSecret.refreshInterval | string | `"3m"` | ESO가 OpenBao를 다시 읽는 주기. secret이 갱신돼도 pod은 자동 재시작되지 않는다 |
+| externalSecret.store | object | `{"kind":"ClusterSecretStore","name":"openbao"}` | 인프라 레포에서 관리하는 SecretStore 참조. 차트는 SecretStore CR을 만들지 않는다 |
 | extraArgs | list | `[]` | Additional command line arguments to pass to the job container |
 | extraCommands | list | `[]` | Additional command line arguments to pass to the job container |
 | extraSecrets | list | `[]` | extra secrets to pass to server |

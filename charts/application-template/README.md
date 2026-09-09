@@ -1,6 +1,6 @@
 # application-template
 
-![Version: 1.12.2](https://img.shields.io/badge/Version-1.12.2-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.13.0](https://img.shields.io/badge/Version-1.13.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for Modusign Applications
 
@@ -26,6 +26,10 @@ Kubernetes: `>=1.23`
 | global.deploymentAnnotations | object | `{}` | Annotations for the all deployed Deployments |
 | global.deploymentStrategy | object | `{}` | Deployment strategy to be added to the all Deployment |
 | global.env | object | `{}` | Environment variables to pass to all deployed Deployments |
+| global.externalSecret | object | `{"enabled":false,"path":"stage-default/application/${service}","refreshInterval":"3m","store":{"kind":"ClusterSecretStore","name":"openbao"}}` | OpenBao KV secret을 External Secrets Operator로 가져와 env로 주입한다 |
+| global.externalSecret.path | string | `"stage-default/application/${service}"` | OpenBao KV path. 이 path의 모든 키가 그대로 env 이름이 된다 |
+| global.externalSecret.refreshInterval | string | `"3m"` | ESO가 OpenBao를 다시 읽는 주기. secret이 갱신돼도 pod은 자동 재시작되지 않으므로 재시작이 필요하면 podAnnotations에 reloader 어노테이션을 추가한다 |
+| global.externalSecret.store | object | `{"kind":"ClusterSecretStore","name":"openbao"}` | 인프라 레포에서 관리하는 SecretStore 참조. 차트는 SecretStore CR을 만들지 않는다 |
 | global.hostAliases | list | `[]` | hostAliases for all containers |
 | global.image.hub | string | `"harbor.modusign.co.kr/modusign"` | hub applied to all deployments |
 | global.image.imagePullPolicy | string | `"IfNotPresent"` | imagePullPolicy applied to all deployments |
