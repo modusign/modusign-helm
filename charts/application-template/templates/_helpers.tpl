@@ -21,15 +21,15 @@ Expand the name of the chart.
 ExternalSecret이 동기화하는 Secret 이름
 */}}
 {{- define "application.server.externalSecretName" -}}
-{{- printf "%s-external-secrets" (include "application.server.name" .) | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-external-secrets" (include "application.server.name" . | trunc 46 | trimSuffix "-") | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{- define "application.worker.externalSecretName" -}}
-{{- printf "%s-external-secrets" (include "application.worker.name" .) | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-external-secrets" (include "application.worker.name" . | trunc 46 | trimSuffix "-") | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{- define "application.scheduler.externalSecretName" -}}
-{{- printf "%s-external-secrets" (include "application.scheduler.name" .) | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-external-secrets" (include "application.scheduler.name" . | trunc 46 | trimSuffix "-") | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*

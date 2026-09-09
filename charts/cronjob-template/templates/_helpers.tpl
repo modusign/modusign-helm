@@ -9,7 +9,7 @@ Expand the name of the chart.
 ExternalSecret이 동기화하는 Secret 이름
 */}}
 {{- define "application.externalSecretName" -}}
-{{- printf "%s-external-secrets" (include "application.name" .) | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-external-secrets" (include "application.name" . | trunc 46 | trimSuffix "-") | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*

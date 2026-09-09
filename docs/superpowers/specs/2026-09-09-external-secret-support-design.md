@@ -43,7 +43,7 @@ global:
     refreshInterval: 3m
 ```
 
-`refreshInterval` 기본값은 ArgoCD의 `timeout.reconciliation` 기본값(180s)에 맞춰 3m으로 둔다. 기존 avp는 repo-server manifest 캐시(`--repo-cache-expiration` 기본 24h) 때문에 git revision이 그대로면 hard refresh 전까지 값이 반영되지 않았다. ESO는 ArgoCD와 무관하게 자체 주기로 OpenBao를 읽으므로 이 제약이 사라진다.
+`refreshInterval` 기본값 3m은 ArgoCD와 무관하게 정한 값이다. ESO는 ArgoCD sync와 상관없이 자체 주기로 OpenBao를 읽는다. 기존 avp는 repo-server manifest 캐시(`--repo-cache-expiration` 기본 24h) 때문에 git revision이 그대로면 hard refresh 전까지 값이 반영되지 않았는데, 3m은 그보다 훨씬 빠르다. 대신 컴포넌트별로 ExternalSecret을 따로 두기 때문에 릴리스 하나가 3분마다 같은 KV path를 3번 읽는다. 서비스가 50개면 ExternalSecret이 약 150개가 되고, OpenBao에는 초당 약 0.8 read가 상시로 깔린다. 이 부하가 부담되면 릴리스별로 `refreshInterval`을 올리면 된다.
 
 cronjob-template은 차트 루트에 같은 필드를 `externalSecret`으로 둔다. 기존 `vault` 블록이 루트에 있는 것과 같은 위치다.
 
