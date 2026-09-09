@@ -28,6 +28,10 @@ ExternalSecret이 동기화하는 Secret 이름
 {{- printf "%s-external-secrets" (include "application.worker.name" .) | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
+{{- define "application.scheduler.externalSecretName" -}}
+{{- printf "%s-external-secrets" (include "application.scheduler.name" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
 {{/*
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
