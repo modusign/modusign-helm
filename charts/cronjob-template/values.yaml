@@ -203,3 +203,13 @@ vault:
   enabled: false
   path: stage-default/application/${service}
   secrets: {}
+
+# -- Secrets variables to pass to the CronJob by External Secrets Operator. Requires ESO v0.15 or later
+externalSecret:
+  enabled: false
+  store:
+    kind: ClusterSecretStore
+    name: openbao
+  path: stage-default/application/${service}
+  refreshInterval: 3m
+  annotations: {}

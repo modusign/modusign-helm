@@ -84,6 +84,10 @@ spec:
               - configMapRef:
                   name: {{ include "application.name" . }}-env
             {{- end }}
+            {{- if .Values.externalSecret.enabled }}
+              - secretRef:
+                  name: {{ include "application.externalSecretName" . }}
+            {{- end }}
             {{- if .Values.vault.enabled  }}
               - secretRef:
                   name: {{ include "application.name" . }}

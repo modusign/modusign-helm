@@ -1,6 +1,6 @@
 # cronjob-template
 
-![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for CronJob
 
@@ -30,6 +30,7 @@ Kubernetes: `>=1.23`
 | cronJob.timeZone | string | `nil` | Available timezone evalues are listed in https://en.wikipedia.org/wiki/List_of_tz_database_time_zones |
 | env | object | `{}` | Environment variables to pass to all deployed Deployments |
 | envFrom | list | `[]` | envfrom in server deployment |
+| externalSecret | object | `{"annotations":{},"enabled":false,"path":"stage-default/application/${service}","refreshInterval":"3m","store":{"kind":"ClusterSecretStore","name":"openbao"}}` | Secrets variables to pass to the CronJob by External Secrets Operator. Requires ESO v0.15 or later |
 | extraArgs | list | `[]` | Additional command line arguments to pass to the job container |
 | extraCommands | list | `[]` | Additional command line arguments to pass to the job container |
 | extraSecrets | list | `[]` | extra secrets to pass to server |

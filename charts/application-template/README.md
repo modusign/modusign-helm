@@ -1,6 +1,6 @@
 # application-template
 
-![Version: 1.12.2](https://img.shields.io/badge/Version-1.12.2-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.13.0](https://img.shields.io/badge/Version-1.13.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for Modusign Applications
 
@@ -26,6 +26,7 @@ Kubernetes: `>=1.23`
 | global.deploymentAnnotations | object | `{}` | Annotations for the all deployed Deployments |
 | global.deploymentStrategy | object | `{}` | Deployment strategy to be added to the all Deployment |
 | global.env | object | `{}` | Environment variables to pass to all deployed Deployments |
+| global.externalSecret | object | `{"annotations":{},"enabled":false,"path":"stage-default/application/${service}","refreshInterval":"3m","store":{"kind":"ClusterSecretStore","name":"openbao"}}` | Secrets variables to pass to all deployed Deployments by External Secrets Operator. Requires ESO v0.15 or later |
 | global.hostAliases | list | `[]` | hostAliases for all containers |
 | global.image.hub | string | `"harbor.modusign.co.kr/modusign"` | hub applied to all deployments |
 | global.image.imagePullPolicy | string | `"IfNotPresent"` | imagePullPolicy applied to all deployments |
