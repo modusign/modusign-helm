@@ -36,8 +36,13 @@ spec:
           metric:
             name: {{ .name }}
           target:
+            {{- if .averageValue }}
+            type: AverageValue
+            averageValue: {{ .averageValue }}
+            {{- else }}
             type: Value
             value: {{ .value }}
+            {{- end }}
       {{- end }}
     {{- with .Values.scheduler.autoscaling.behavior }}
     behavior:

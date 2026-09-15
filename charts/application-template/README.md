@@ -1,6 +1,6 @@
 # application-template
 
-![Version: 1.13.0](https://img.shields.io/badge/Version-1.13.0-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
+![Version: 1.13.1](https://img.shields.io/badge/Version-1.13.1-informational?style=flat-square) ![AppVersion: v1.0.0](https://img.shields.io/badge/AppVersion-v1.0.0-informational?style=flat-square)
 
 A Helm chart for Modusign Applications
 
