@@ -1,0 +1,66 @@
+suite: scheduler - horizontal pod autoscaler
+templates:
+  - templates/scheduler/horizontal-pod-autoscaler.yaml
+
+tests:
+  - it: externalMetrics에 value만 있으면 target type이 Value여야 한다
+    set:
+      scheduler.enabled: true
+      scheduler.autoscaling.enabled: true
+      scheduler.autoscaling.externalMetrics:
+        - name: datadogmetric@default:express-hits-document-per-pod
+          value: 12
+    asserts:
+      - hasDocuments:
+          count: 1
+      - equal:
+          path: spec.metrics[1].type
+          value: External
+      - equal:
+          path: spec.metrics[1].external.metric.name
+          value: datadogmetric@default:express-hits-document-per-pod
+      - equal:
+          path: spec.metrics[1].external.target.type
+          value: Value
+      - equal:
+          path: spec.metrics[1].external.target.value
+          value: 12
+      - notExists:
+          path: spec.metrics[1].external.target.averageValue
+
+  - it: externalMetrics에 averageValue가 있으면 target type이 AverageValue여야 한다
+    set:
+      scheduler.enabled: true
+      scheduler.autoscaling.enabled: true
+      scheduler.autoscaling.externalMetrics:
+        - name: datadogmetric@default:express-hits-document-total
+          averageValue: 12
+    asserts:
+      - equal:
+          path: spec.metrics[1].external.target.type
+          value: AverageValue
+      - equal:
+          path: spec.metrics[1].external.target.averageValue
+          value: 12
+      - notExists:
+          path: spec.metrics[1].external.target.value
+
+  - it: value와 averageValue 지표를 섞어도 각각 다른 타입으로 렌더되어야 한다
+    set:
+      scheduler.enabled: true
+      scheduler.autoscaling.enabled: true
+      scheduler.autoscaling.externalMetrics:
+        - name: datadogmetric@default:express-hits-document-per-pod
+          value: 12
+        - name: datadogmetric@default:express-hits-document-total
+          averageValue: 80
+    asserts:
+      - equal:
+          path: spec.metrics[1].external.target.type
+          value: Value
+      - equal:
+          path: spec.metrics[2].external.target.type
+          value: AverageValue
+      - equal:
+          path: spec.metrics[2].external.target.averageValue
+          value: 80

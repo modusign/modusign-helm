@@ -247,6 +247,9 @@ server:
     externalMetrics: []
       # - name: datadogmetric@namespace:metricname
       #   value: "800"
+      # averageValue를 쓰면 target type이 AverageValue가 되어 파드당 목표로 해석된다
+      # - name: datadogmetric@namespace:metricname
+      #   averageValue: "80"
     # -- Configures the scaling behavior of the target in both Up and Down directions.
     behavior:
       {}
@@ -613,6 +616,9 @@ worker:
     externalMetrics: []
       # - name: datadogmetric@namespace:metricname
       #   value: "800"
+      # averageValue를 쓰면 target type이 AverageValue가 되어 파드당 목표로 해석된다
+      # - name: datadogmetric@namespace:metricname
+      #   averageValue: "80"
     # -- Configures the scaling behavior of the target in both Up and Down directions.
     behavior:
       {}
@@ -962,6 +968,9 @@ scheduler:
     externalMetrics: []
       # - name: datadogmetric@namespace:metricname
       #   value: "800"
+      # averageValue를 쓰면 target type이 AverageValue가 되어 파드당 목표로 해석된다
+      # - name: datadogmetric@namespace:metricname
+      #   averageValue: "80"
     # -- Configures the scaling behavior of the target in both Up and Down directions.
     behavior:
       {}
